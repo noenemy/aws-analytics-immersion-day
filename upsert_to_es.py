@@ -8,6 +8,7 @@ import os
 import base64
 import traceback
 import hashlib
+import datetime
 
 import boto3
 from elasticsearch import Elasticsearch
@@ -16,31 +17,31 @@ from requests_aws4auth import AWS4Auth
 
 ES_INDEX, ES_TYPE = (os.getenv('ES_INDEX', 'retail'), os.getenv('ES_TYPE', 'trans'))
 ES_HOST = os.getenv('ES_HOST')
-REQUIRED_FIELDS = os.getenv('REQUIRED_FIELDS', '').split(',')
+REQUIRED_FIELDS = [e for e in os.getenv('REQUIRED_FIELDS', '').split(',') if e]
+DATE_TYPE_FIELDS = [e for e in os.getenv('DATE_TYPE_FIELDS', '').split(',') if e]
+DATE_FORMAT = os.getenv('DATE_FORMAT', '%Y-%m-%d %H:%M:%S')
 
 AWS_REGION = os.getenv('REGION_NAME', 'us-east-1')
 
 session = boto3.Session(region_name=AWS_REGION)
 credentials = session.get_credentials()
 credentials = credentials.get_frozen_credentials()
-access_key = credentials.access_key
-secret_key = credentials.secret_key
-token = credentials.token
+access_key, secret_key, token = (credentials.access_key, credentials.secret_key, credentials.token)
 
 aws_auth = AWS4Auth(
-    access_key,
-    secret_key,
-    AWS_REGION,
-    'es',
-    session_token=token
+  access_key,
+  secret_key,
+  AWS_REGION,
+  'es',
+  session_token=token
 )
 
 es_client = Elasticsearch(
-    hosts = [{'host': ES_HOST, 'port': 443}],
-    http_auth=aws_auth,
-    use_ssl=True,
-    verify_certs=True,
-    connection_class=RequestsHttpConnection
+  hosts = [{'host': ES_HOST, 'port': 443}],
+  http_auth=aws_auth,
+  use_ssl=True,
+  verify_certs=True,
+  connection_class=RequestsHttpConnection
 )
 print('[INFO] ElasticSearch Service', json.dumps(es_client.info(), indent=2), file=sys.stderr)
 
@@ -51,6 +52,7 @@ def lambda_handler(event, context):
   counter = collections.OrderedDict([('reads', 0),
       ('writes', 0),
       ('invalid', 0),
+      ('index_errors', 0),
       ('errors', 0)])
 
   doc_list = []
@@ -64,25 +66,31 @@ def lambda_handler(event, context):
         counter['invalid'] += 1
         continue
 
-      doc_id = ':'.join([json_data.get(k, '') for k in REQUIRED_FIELDS])
+      doc_id = ':'.join([json_data.get(k, '') for k in REQUIRED_FIELDS if k])
       json_data['doc_id'] = hashlib.md5(doc_id.encode('utf-8')).hexdigest()[:8]
+
+      for k in DATE_TYPE_FIELDS:
+        if k in json_data:
+          dt = datetime.datetime.strptime(json_data[k], DATE_FORMAT)
+          json_data[k] = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
       es_index_action_meta = {"index": {"_index": ES_INDEX, "_type": ES_TYPE, "_id": json_data['doc_id']}}
       doc_list.append(es_index_action_meta)
-      doc_list.append(doc)
+      doc_list.append(json_data)
 
       counter['writes'] += 1
     except Exception as ex:
       counter['errors'] += 1
       traceback.print_exc()
 
-  print('[INFO]', ', '.join(['{}={}'.format(k, v) for k, v in counter.items()]), file=sys.stderr)
-
   try:
     es_bulk_body = '\n'.join([json.dumps(e) for e in doc_list])
     res = es_client.bulk(body=es_bulk_body, index=ES_INDEX, refresh=True)
   except Exception as ex:
+    counter['index_errors'] += 1
     traceback.print_exc()
+
+  print('[INFO]', ', '.join(['{}={}'.format(k, v) for k, v in counter.items()]), file=sys.stderr)
 
 
 if __name__ == '__main__':
