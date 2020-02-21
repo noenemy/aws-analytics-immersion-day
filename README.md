@@ -1,3 +1,6 @@
+### Architecture
+![aws-analytics-system-architecture](aws-analytics-system-arch.png)
+
 ### 전체 과정
  - Kinesis Firehose 및 s3 버킷 생성
  - KFH를 이용해서 데이터 넣기
