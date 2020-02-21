@@ -15,6 +15,15 @@
  - 랩가이드가 있는 github에서 클론을 해서 설치함
  - 필용한 IAM Role과 security group을 생성
 
+### Kinesis Data Streams 생성
+AWS Management Console에서 Kinesis 서비스를 선택합니다.
+1. **Get Started** 버튼을 클릭합니다.
+2. **\[Create data stream\]** 버튼을 클릭합니다.
+3. Kinesis stream name 을 입력합니다. (uk-online-retail-trans)
+4. Number of shards 에 shards 수를 입력합니다.
+5. **\[Create data stream\]** 버튼을 클릭 후, 생성된 kinesis stream의 status가 active가 될 때까지 기다립니다.
+
+Kinesis 스트림 생성 버튼 클릭
 ### Kinesis Firehose 생성
 Kinesis Firehose를 이용해서 실시간으로 데이터를 S3, Redshift, ElasticSearch 등의 목적지에 수집할 수 있습니다.
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
@@ -185,5 +194,48 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 
 ### AWS Lambda
 Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
-1. blabla ...
-2. blablabla ...
+이번 실습에서는 AWS Lambda 콘솔을 사용하여 Lambda 함수를 생성합니다.
+
+##### Lambda 함수에서 사용할 공통 라이브러를 Layers에 추가하려면,
+1. **AWS Lambda 콘솔** 을 엽니다.
+2. **Layers** 메뉴에 들어가서 **\[Create layer\]** 을 선택합니다.
+3. Name에 `es-lib` 를 입력합니다.
+4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url을 입력합니다.
+5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
+
+##### Lambda 함수를 생성하려면,
+1. AWS Lambda 콘솔을 엽니다.
+2. **\[Create a function\]** 을 선택합니다.
+3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
+4. Runtime 에서 `Python 3.8` 을 선택합니다.
+5. **\[Create a function\]** 을 선택합니다.
+6. Designer(디자이너) 에서 layers를 선택합니다. Layers에서 Add a layer를 선택합니다.
+7. Layer selection에서 Compatiable layers에서 Name과 Version으로 앞서 생성한 layer의 Name과 Version을 선택합니다.
+8. **\[Add\]** 클릭합니다.
+9. Designer(디자이너) 에서 `UpsertToES` 을 선택하여 함수의 코드 및 구성으로 돌아갑니다.
+10. **\[Add trigger\]** 를 선택합니다.
+11. **Trigger configuration** 에서 Kinesis를 선택 합니다.
+12. Kinesis stream 에서 앞서 생성한 Kinesis Data Stream을 선택합니다.
+13. **\[Add\]** 를 선택합니다.
+14. Function code의 코드 편집기에 `upsert_to_es.py` 파일의 코드를 복사해서 붙여넣습니다.
+15. Environment variables 에서 **\[Edit\]** 를 클릭합니다.
+16. **\[Add environment variables\]** 를 클릭해서 아래 4개의 Environment variables을 등록합니다.
+    ```shell script
+    ES_HOST=<elasticsearch service domain>
+    REQUIRED_FIELDS=Invoice,StockCode,Customer_ID
+    REGION_NAME=<region-name>
+    DATE_TYPE_FIELDS=InvoiceDate
+    ```
+ 
+    예를 들어, 다음과 같이 Environment variables을 설정합니다.
+    ```buildoutcfg
+    ES_HOST=vpc-retail-xkl5jpog76d5abzhg4kyfilymq.us-east-1.es.amazonaws.com
+    REQUIRED_FIELDS=Invoice,StockCode,Customer_ID
+    REGION_NAME=us-east-1
+    DATE_TYPE_FIELDS=InvoiceDate
+    ```
+17. **\[Save\]** 선택합니다.
+18. VPC 항목에서 Elasticsearch service의 도메인을 생성한 VPC와 subnets을 선택하고, Elasticsearch service 도메인에 접근이 허용된
+security groups을 선택합니다.
+19. Basic settings에서 **\[Edit\]** 선택합니다.
+20. Memory와 Timeout을 알맞게 조정합니다. 이번 실습에서는 Timout을 `5 min` 으로 설정합니다.
