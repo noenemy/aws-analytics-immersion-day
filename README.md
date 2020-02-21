@@ -241,3 +241,24 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 security groups을 선택합니다.
 19. Basic settings에서 **\[Edit\]** 선택합니다.
 20. Memory와 Timeout을 알맞게 조정합니다. 이번 실습에서는 Timout을 `5 min` 으로 설정합니다.
+
+### Amazon Quicksight
+1. 이번에는 Amazon Quicksight를 통해 parquet 테이블 데이터를 시각화 해 보도록 하겠습니다. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
+2. Quicksight에 가입하기 위해 Sign up for QuickSight 버튼을 클릭합니다.
+3. Standard Edition을 선택한 후 Continue버튼을 클릭합니다.
+4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고 Notification email address는 개인 Email 주소를 입력합니다. QuckSight가 S3에 Access해야 하므로, Choose S3 buckets를 클릭하여 `aws-analytics-immersion-day-2020-apne2` 를 선택한 후 Finish를 클릭합니다.
+5. 계정이 생성된 후 Go to Amazon Quicksight 버튼을 클릭합니다.
+6. 좌측 상단 New Analysis를 클릭합니다.
+7. New Data Set 버튼을 클릭합니다.
+8. Athena를 클릭하고 팝업 창의 Data source name에 `uk-retail-quicksight` 를 입력(임의의 값 입력 가능)하고 Create data source버튼을 클릭합니다.
+9. Choose your table에서 Database는 `XXXX`, Tables는 `retail-json` 를 선택하고 Select 버튼을 클릭합니다.
+10. Visualize 버튼을 클릭한 후 `retail-json` 테이블 데이터가 Quicksight SPICE 엔진에 로딩 되었는지 확인합니다.
+11. InvoicdDate 별 Quantity를 시각화 해 보겠습니다. 좌측 Fields list에서 invoicedate, quantity field를 차례대로 클릭합니다. Visual types는 세로 막대 그래프를 선택합니다.
+12. 그래프 상단 invoicedate 를 클릭하고 Aggregate: Day를 Quarter로 변경합니다.
+13. 분기별로 데이터가 집계 되었습니다.
+14. 방금 만든 Dashboard를 다른 사용자에게 공유해 보겠습니다. 좌측 상단 유저 아이콘을 클릭하고 Manage QuickSight를 클릭합니다.
+15. Invite users 버튼을 클릭한 후 임의의 사용자 계정명(BI_user01)을 입력한 후 우측 [+] 버튼을 클릭합니다. Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM User는 NO를 선택한 후 Invite 버튼을 클릭합니다.
+16. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
+17. QuickSight 화면으로 돌아가서 우측 상단의 Share > Share analysis를 클릭합니다.
+18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
+19. 사용자는 다음과 같은 Email을 수신합니다. Click to View를 클릭하여 분석결과를 확인할 수 있습니다.
