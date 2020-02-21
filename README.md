@@ -13,6 +13,7 @@
 ### 준비 작업
  - 데이터를 넣어줄 ec2 장비를 생성함
  - 랩가이드가 있는 github에서 클론을 해서 설치함
+ - 필용한 IAM Role과 security group을 생성
 
 ### Kinesis Firehose 생성
 Kinesis Firehose를 이용해서 실시간으로 데이터를 S3, Redshift, ElasticSearch 등의 목적지에 수집할 수 있습니다.
@@ -133,3 +134,56 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 
 ### Amazon QuickSight
 이번에는 Amazon Quicksight를 통해 데이터를 시각화 해 보도록 하겠습니다. Quicksight 콘솔로 이동합니다.
+
+### Amazon Elasticsearch Service(Amazon ES)
+실시간으로 데이터를 저장하고, 분석하기 위해서 Elasticsearch cluster를 생성합니다.
+Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메인은 설정, 인스턴스 유형, 인스턴스 수, 스토리지 리소스를 지정한 설정입니다.
+
+**Amazon ES 도메인을 만들려면(콘솔)**
+1. https://aws.amazon.com으로 이동하여 Sign In to the Console(콘솔에 로그인)을 선택합니다.
+2. **Analytics**에서 **Elasticsearch** 서비스를 선택합니다.
+3. (Step 1: Choose deployment type) **Create a new domain(새 도메인 생성)**을 선택합니다.
+4. **Elasticsearch 도메인 생성** 페이지에서 **Deployment type(배포 유형)**에 대해 **Production(프로턱션)**을 선택합니다.
+5. **버전**에서 해당 도메인의 Elasticsearch 버전을 선택합니다. 지원되는 최신 버전을 선택하는 것이 좋습니다. 자세한 내용은 지원되는 Elasticsearch 버전 단원을 참조하십시오.
+6. **\[Next\]**를 선택합니다.
+7. (Step 2: Configure domain) 도메인의 이름을 입력합니다. 이 자습서에서는 이후에 다룰 retails를 예제 도메인 이름으로 사용합니다.
+8. 인스턴스 유형에서 Amazon ES 도메인의 인스턴스 유형을 선택합니다. 이 자습서에는 테스트 목적에 적합한 소용량의 경제적인 인스턴스 유형 t2.small.elasticsearch를 사용하는 것이 좋습니다.
+9. 인스턴스 수에 원하는 인스턴스 수를 입력합니다. 이 자습서에서는 기본값 1을 사용합니다.
+10. 스토리지 유형에서 EBS를 선택합니다.
+- a. EBS volume type(EBS 볼륨 유형)에 일반용(SSD)을 선택합니다. 자세한 내용은 Amazon EBS 볼륨 유형을 참조하십시오.
+- b. EBS volume size(EBS 볼륨 크기)에 각 데이터 노드용 외부 스토리지의 크기를 GiB 단위로 입력합니다. 이 자습서에서는 기본값 10을 사용합니다.
+11. 지금은 **Dedicated master nodes(전용 마스터 노드), Snapshot configuration(스냅샷 구성)** 및 **Optional Elasticsearch cluster settings(선택적 Elasticsearch 클러스터 설정)** 섹션을 무시할 수 있습니다.
+12. **\[Next\]**를 선택합니다.
+13. (Step 3: Configure access and security) **Network configuration(네트워크 구성)**의 경우 **VPC access**를 선택합니다.
+14. 지금은 **Amazon Cognito Authentication(Amazon Cognito 인증)** 과 **Fine–grained access control** 을 disable 합니다.
+15. **Access policy(액세스 정책)** 의 경우 **Domain access policy(도메인 액세스 정책)** 에서 **JSON defined access policy(JSON 정의 액세스 정책)** 선택한 다음,
+**Add or edit the access policy(액세스 정책 추가 또는 편집)** 에 아래와 같이 입력합니다.
+    ```json
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "*"
+          },
+          "Action": [
+            "es:Describe*",
+            "es:List*",
+            "es:Get*",
+            "es:ESHttp*"
+          ],
+          "Resource": "arn:aws:es:::domain/retail/*"
+        }
+      ]
+    }
+    ```
+16. **Encryption(암호화)** 에서 **Require HTTPS for all traffic to the domain** 만 허용하고, 다른 항목은 disable 합니다.
+17. **Encryption(암호화)** 의 모든 기본값을 유지합니다.
+18. **\[Next\]** 를 선택합니다.
+19. **Review** 페이지에서 도메인 구성을 검토한 다음 **확인**을 선택합니다.
+
+### AWS Lambda
+Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
+1. blabla ...
+2. blablabla ...
