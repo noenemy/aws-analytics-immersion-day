@@ -88,11 +88,11 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     ```buildoutcfg
     CREATE DATABASE mydatabase
     ```
-5. 카탈로그 디스플레이가 새로 고쳐지고 왼쪽 [Catalog] 대시보드의 [DATABASE] 목록에 mydatabase가 표시되는지 확인합니다.
+5. 카탈로그 디스플레이가 새로 고쳐지고 왼쪽 **\[Catalog\]** 대시보드의 **\[DATABASE\]** 목록에 mydatabase가 표시되는지 확인합니다.
 
 ##### 2단계: 테이블 생성
 1. **\[DATABASE\]** 에 `mydatabase`가 선택되었는지 확인한 후 **\[New Query\]** 를 선택합니다.
-2. 쿼리 창에 다음 CREATE TABLE 문을 입력한 후 \**[Run Query\]** 를 선택합니다.
+2. 쿼리 창에 다음 CREATE TABLE 문을 입력한 후 **\[Run Query\]** 를 선택합니다.
     ```buildoutcfg
     CREATE EXTERNAL TABLE `mydatabase.retail_trans`(
       `invoice` string COMMENT 'Invoice number', 
@@ -142,19 +142,19 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 **Amazon ES 도메인을 만들려면(콘솔)**
 1. https://aws.amazon.com으로 이동하여 Sign In to the Console(콘솔에 로그인)을 선택합니다.
 2. **Analytics**에서 **Elasticsearch** 서비스를 선택합니다.
-3. (Step 1: Choose deployment type) **Create a new domain(새 도메인 생성)**을 선택합니다.
-4. **Elasticsearch 도메인 생성** 페이지에서 **Deployment type(배포 유형)**에 대해 **Production(프로턱션)**을 선택합니다.
+3. (Step 1: Choose deployment type) **Create a new domain(새 도메인 생성)** 을 선택합니다.
+4. **Elasticsearch 도메인 생성** 페이지에서 **Deployment type(배포 유형)** 에 대해 **Production(프로턱션)** 을 선택합니다.
 5. **버전**에서 해당 도메인의 Elasticsearch 버전을 선택합니다. 지원되는 최신 버전을 선택하는 것이 좋습니다. 자세한 내용은 지원되는 Elasticsearch 버전 단원을 참조하십시오.
-6. **\[Next\]**를 선택합니다.
+6. **\[Next\]** 를 선택합니다.
 7. (Step 2: Configure domain) 도메인의 이름을 입력합니다. 이 자습서에서는 이후에 다룰 retails를 예제 도메인 이름으로 사용합니다.
-8. 인스턴스 유형에서 Amazon ES 도메인의 인스턴스 유형을 선택합니다. 이 자습서에는 테스트 목적에 적합한 소용량의 경제적인 인스턴스 유형 t2.small.elasticsearch를 사용하는 것이 좋습니다.
-9. 인스턴스 수에 원하는 인스턴스 수를 입력합니다. 이 자습서에서는 기본값 1을 사용합니다.
+8. **인스턴스 유형** 에서 Amazon ES 도메인의 인스턴스 유형을 선택합니다. 이 자습서에는 테스트 목적에 적합한 소용량의 경제적인 인스턴스 유형 `t2.small.elasticsearch`를 사용하는 것이 좋습니다.
+9. **인스턴스 수** 에 원하는 인스턴스 수를 입력합니다. 이 자습서에서는 기본값 1을 사용합니다.
 10. 스토리지 유형에서 EBS를 선택합니다.
 - a. EBS volume type(EBS 볼륨 유형)에 일반용(SSD)을 선택합니다. 자세한 내용은 Amazon EBS 볼륨 유형을 참조하십시오.
 - b. EBS volume size(EBS 볼륨 크기)에 각 데이터 노드용 외부 스토리지의 크기를 GiB 단위로 입력합니다. 이 자습서에서는 기본값 10을 사용합니다.
 11. 지금은 **Dedicated master nodes(전용 마스터 노드), Snapshot configuration(스냅샷 구성)** 및 **Optional Elasticsearch cluster settings(선택적 Elasticsearch 클러스터 설정)** 섹션을 무시할 수 있습니다.
-12. **\[Next\]**를 선택합니다.
-13. (Step 3: Configure access and security) **Network configuration(네트워크 구성)**의 경우 **VPC access**를 선택합니다.
+12. **\[Next\]** 를 선택합니다.
+13. (Step 3: Configure access and security) **Network configuration(네트워크 구성)** 의 경우 **VPC access** 를 선택합니다.
 14. 지금은 **Amazon Cognito Authentication(Amazon Cognito 인증)** 과 **Fine–grained access control** 을 disable 합니다.
 15. **Access policy(액세스 정책)** 의 경우 **Domain access policy(도메인 액세스 정책)** 에서 **JSON defined access policy(JSON 정의 액세스 정책)** 선택한 다음,
 **Add or edit the access policy(액세스 정책 추가 또는 편집)** 에 아래와 같이 입력합니다.
