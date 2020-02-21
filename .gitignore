@@ -133,6 +133,7 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
+.idea/
 bin/
 lib64
 pyvenv.cfg
