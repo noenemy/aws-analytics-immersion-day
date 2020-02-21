@@ -204,7 +204,7 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
 
 ##### Lambda 함수를 생성하려면,
-1. AWS Lambda 콘솔을 엽니다.
+1. **AWS Lambda 콘솔** 을 엽니다.
 2. **\[Create a function\]** 을 선택합니다.
 3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
 4. Runtime 에서 `Python 3.8` 을 선택합니다.
@@ -226,7 +226,6 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
     REGION_NAME=<region-name>
     DATE_TYPE_FIELDS=InvoiceDate
     ```
- 
     예를 들어, 다음과 같이 Environment variables을 설정합니다.
     ```buildoutcfg
     ES_HOST=vpc-retail-xkl5jpog76d5abzhg4kyfilymq.us-east-1.es.amazonaws.com
