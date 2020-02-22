@@ -31,6 +31,8 @@ AWS Management Console access 둘 모두를 선택합니다. Console password에
 9. Step 6: Configure Security Group 화면에서 Security Group에 필요한 정보를 입력한 후 Review and Launch를 클릭합니다.
     + Security Group Name : bastion
     + Description : SG for bastion
+ 
+    Security group rules의 **Inbound** 에 아래 내용을 입력합니다.
     + Type : SSH
     + Protocol : TCP
     + Port Range : 22
@@ -70,3 +72,24 @@ Key Pair를 PC의 임의 위치에 저장한 후 Launch Instances를 클릭합�
     Default region name [None]: us-west-2
     Default output format [None]: 
     ```
+
+### Elasicsearch Service에서 사용할 Security Groups 생성
+실습에서 사용할 EC2와 Elasticsearch Service을 위한 security group을 생성하고 구성합니다.
+1. AWS Management Console에서 EC2 서비스에 접속합니다.
+2. **NETWORK & SECURITY** 메뉴에서 **Security Groups** 항목을 선택합니다.
+3. **\[Create Security Group\]** 을 클릭합니다.
+4. Create Security Group 화면에서 Security Group에 필요한 정보를 입력한 후, 새로운 security group을  **\[Create\]** 합니다.
+    + Security Group Name : use-es-cluster-sg
+    + Description : security group for an es client
+
+    Security group rules의 **Inbound** 은 아무것도 입력하지 않습니다.
+5. 다시 **\[Create Security Group\]** 클릭해서 Create Security Group 화면으로 이동합니다.
+Security Group에 필요한 정보를 입력한 후, 새로운 security group을 **\[Create\]** 합니다.
+    + Security Group Name : es-cluster-sg
+    + Description : security group for an es cluster
+ 
+    Security group rules의 **Inbound** 에 아래 내용을 입력합니다.
+    + Type : All TCP
+    + Protocol : TCP
+    + Port Range : 0-65535
+    + Source : `use-es-cluster-sg` 의 security group id
