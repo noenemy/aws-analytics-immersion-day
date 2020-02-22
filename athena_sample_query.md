@@ -73,8 +73,3 @@ FROM retail_json;
 ### Reference
 - https://docs.aws.amazon.com/ko_kr/athena/latest/ug/ctas-examples.html#ctas-example-format
 - https://docs.aws.amazon.com/ko_kr/athena/latest/ug/ctas-examples.html#ctas-example-compression
-
-
-
-
-```
