@@ -14,9 +14,9 @@
  - Kibana에서 dashboard 만들어 보기
  
 ### 준비 작업
- - 데이터를 넣어줄 ec2 장비를 생성함
- - 랩가이드가 있는 github에서 클론을 해서 설치함
- - 필용한 IAM Role과 security group을 생성
+실습을 시작 하기 전에 필요한 IAM User, EC2를 생성하고 및 구성합니다.
+ - [사전 준비 작업](prerequisites.md)
+ - 필요한 IAM Role과 security group을 생성
 
 ### Kinesis Data Streams 생성
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
@@ -144,8 +144,6 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     ```
 다음과 같은 형식의 결과가 반환됩니다.
 
-### Amazon QuickSight
-이번에는 Amazon Quicksight를 통해 데이터를 시각화 해 보도록 하겠습니다. Quicksight 콘솔로 이동합니다.
 
 ### Amazon Elasticsearch Service(Amazon ES)
 실시간으로 데이터를 저장하고, 분석하기 위해서 Elasticsearch cluster를 생성합니다.
@@ -243,7 +241,8 @@ security groups을 선택합니다.
 20. Memory와 Timeout을 알맞게 조정합니다. 이번 실습에서는 Timout을 `5 min` 으로 설정합니다.
 
 ### Amazon Quicksight
-1. 이번에는 Amazon Quicksight를 통해 parquet 테이블 데이터를 시각화 해 보도록 하겠습니다. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
+이번에는 Amazon Quicksight를 통해 데이터를 시각화 해 보도록 하겠습니다.
+1. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
 2. Quicksight에 가입하기 위해 Sign up for QuickSight 버튼을 클릭합니다.
 3. Standard Edition을 선택한 후 Continue버튼을 클릭합니다.
 4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고 Notification email address는 개인 Email 주소를 입력합니다. QuckSight가 S3에 Access해야 하므로, Choose S3 buckets를 클릭하여 `aws-analytics-immersion-day-2020-apne2` 를 선택한 후 Finish를 클릭합니다.
