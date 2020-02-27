@@ -1,33 +1,34 @@
 # AWS Analytics Immersion Day Workshop
 
 이 실습의 목적은 Businesss Intelligence System을 aws의 analytics 서비스를 활용해서 구현해 보는 것 입니다.
-이 실습을 통해서 데이터 수집 -> 저장 -> 분석/처리 -> 시각화 단계를 aws analytics 서비스를 이용해서
+이 실습을 통해서 `데이터 수집 -> 저장 -> 분석/처리 -> 시각화` 단계를 aws analytics 서비스를 이용해서
 어떻게 구축할 수 있는지 경험하실 수 있습니다.
 
 ## Table of Contents
 * [Solutions Architecture Overview](#solutions-architecture-overview)
-* [사전 준비 작업](#prerequisites)
-* [\[Step-1a\] 입력 데이터를 수신할 Kinesis Data Streams 생성 하기](#kinesis-data-streams)
-* [\[Step-1b\] 데이터를 S3에 저장하기 위한 Kinesis Data Firehose 생성 하기](#kinesis-data-firehose)
+* [사전 준비 작업](#preliminaries)
+* [\[Step-1a\] 입력 데이터를 수신할 Kinesis Data Streams 생성하기](#kinesis-data-streams)
+* [\[Step-1b\] 데이터를 S3에 저장하기 위한 Kinesis Data Firehose 생성하기](#kinesis-data-firehose)
 * [\[Step-1c\] 데이터 파이프라인 동작 확인 하기](#kinesis-data-pipeline)
 * [\[Step-1d\] Athena를 이용해서 데이터 분석 하기](#athena)
 * [\[Step-1e\] QuickSight를 이용한 데이터 시각화](#amazon-quicksight-visualization)
 * [\[Step-2a\] 실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기](#amazon-es)
-* [\[Step-2b\] 실시간 데이터를 AWS Lambda Function을 이용해서 ElasticSearch에 수집 하기](#amazon-lambda-function)
+* [\[Step-2b\] AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기](#amazon-lambda-function)
 * [\[Step-2c\] Kibana를 이용한 데이터 시작화](#amazon-es-kibana-visualization)
 * [Recap and Review](#recap-and-review)
 
 ## <a name="solutions-architecture-overview"></a>Solutions Architecture Overview
 ![aws-analytics-system-architecture](aws-analytics-system-arch.png)
- 
-## <a name="prerequisites"></a>사전 준비 작업
+
+\[[Top](#Top)\]
+
+## <a name="preliminaries"></a>사전 준비 작업
 실습을 시작 하기 전에 필요한 IAM User, EC2를 생성하고 및 구성합니다.
- - [사전 준비 작업](prerequisites.md)
- - 필요한 IAM Role과 security group을 생성
+ - [실습 환경 준비 하기](prerequisites.md)
  
 \[[Top](#Top)\]
 
-## <a name="kinesis-data-streams"></a>입력 데이터를 수신할 Kinesis Data Streams 생성 하기
+## <a name="kinesis-data-streams"></a>입력 데이터를 수신할 Kinesis Data Streams 생성하기
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
 1. **Get Started** 버튼을 클릭합니다.
 2. **\[Create data stream\]** 버튼을 클릭합니다.
@@ -37,7 +38,7 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
 \[[Top](#Top)\]
 
-## <a name="kinesis-data-firehose"></a>데이터를 S3에 저장하기 위한 Kinesis Data Firehose 만들기
+## <a name="kinesis-data-firehose"></a>데이터를 S3에 저장하기 위한 Kinesis Data Firehose 생성하기
 Kinesis Firehose를 이용해서 실시간으로 데이터를 S3, Redshift, ElasticSearch 등의 목적지에 수집할 수 있습니다.
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
@@ -67,7 +68,7 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
 \[[Top](#Top)\]
 
-## <a name="kinesis-data-pipeline"></a>데이터를 Kinesis Firehose를 이용해서 수집하기
+## <a name="kinesis-data-pipeline"></a>데이터 파이프라인 동작 확인 하기
 샘플 데이터를 이용해서 `Kinesis Data Streams -> Kinesis Data Firehose -> S3` 로 데이터가 정상적으로 수집되는지 확인합니다.
 1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
 2. gen_kinesis_data.py을 실행합니다.
@@ -157,6 +158,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     LIMIT 10
     ```
 다음과 같은 형식의 결과가 반환됩니다.
+![aws_athena_select_all_limit_10](./assets/aws_athena_select_all_limit_10.png)
 
 \[[Top](#Top)\]
 
@@ -235,7 +237,7 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 
 \[[Top](#Top)\]
 
-## <a name="aws-lambda-function"></a>실시간 데이터를 AWS Lambda Function을 이용해서 ElasticSearch에 수집 하기
+## <a name="aws-lambda-function"></a>AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기
 Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
 이번 실습에서는 AWS Lambda 콘솔을 사용하여 Lambda 함수를 생성합니다.
 
