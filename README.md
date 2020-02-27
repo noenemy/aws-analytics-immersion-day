@@ -1,24 +1,33 @@
-### Architecture
-![aws-analytics-system-architecture](aws-analytics-system-arch.png)
+# AWS Analytics Immersion Day Workshop
 
-### 전체 과정
- - Kinesis Firehose 및 s3 버킷 생성
- - KFH를 이용해서 데이터 넣기
- - Athena 데이터베이스 및 테이블 생성
- - (optional) Glue를 이용한 스키마 변경
- - (optional) Athena를 이용한 작은 파일들 머지하는 작업
- - QuickSight에서 Athena 데이터 읽어서 보여주기 (?)
- - ElasticSearch 클러스터 생성하기
- - Lambda function을 이용해서 Elasticsearch에 넣기
- - Kibana에서 쿼리해보기
- - Kibana에서 dashboard 만들어 보기
+이 실습의 목적은 Businesss Intelligence System을 aws의 analytics 서비스를 활용해서 구현해 보는 것 입니다.
+이 실습을 통해서 데이터 수집 -> 저장 -> 분석/처리 -> 시각화 단계를 aws analytics 서비스를 이용해서
+어떻게 구축할 수 있는지 경험하실 수 있습니다.
+
+## Table of Contents
+* [Solutions Architecture Overview](#solutions-architecture-overview)
+* [사전 준비 작업](#prerequisites)
+* [\[Step-1a\] 입력 데이터를 수신할 Kinesis Data Streams 생성 하기](#kinesis-data-streams)
+* [\[Step-1b\] 데이터를 S3에 저장하기 위한 Kinesis Data Firehose 생성 하기](#kinesis-data-firehose)
+* [\[Step-1c\] 데이터 파이프라인 동작 확인 하기](#kinesis-data-pipeline)
+* [\[Step-1d\] Athena를 이용해서 데이터 분석 하기](#athena)
+* [\[Step-1e\] QuickSight를 이용한 데이터 시각화](#amazon-quicksight-visualization)
+* [\[Step-2a\] 실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기](#amazon-es)
+* [\[Step-2b\] 실시간 데이터를 AWS Lambda Function을 이용해서 ElasticSearch에 수집 하기](#amazon-lambda-function)
+* [\[Step-2c\] Kibana를 이용한 데이터 시작화](#amazon-es-kibana-visualization)
+* [Recap and Review](#recap-and-review)
+
+## <a name="solutions-architecture-overview"></a>Solutions Architecture Overview
+![aws-analytics-system-architecture](aws-analytics-system-arch.png)
  
-### 준비 작업
+## <a name="prerequisites"></a>사전 준비 작업
 실습을 시작 하기 전에 필요한 IAM User, EC2를 생성하고 및 구성합니다.
  - [사전 준비 작업](prerequisites.md)
  - 필요한 IAM Role과 security group을 생성
+ 
+\[[Top](#Top)\]
 
-### Kinesis Data Streams 생성
+## <a name="kinesis-data-streams"></a>입력 데이터를 수신할 Kinesis Data Streams 생성 하기
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
 1. **Get Started** 버튼을 클릭합니다.
 2. **\[Create data stream\]** 버튼을 클릭합니다.
@@ -26,8 +35,9 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 4. Number of shards 에 shards 수를 입력합니다.
 5. **\[Create data stream\]** 버튼을 클릭 후, 생성된 kinesis stream의 status가 active가 될 때까지 기다립니다.
 
-Kinesis 스트림 생성 버튼 클릭
-### Kinesis Firehose 생성
+\[[Top](#Top)\]
+
+## <a name="kinesis-data-firehose"></a>데이터를 S3에 저장하기 위한 Kinesis Data Firehose 만들기
 Kinesis Firehose를 이용해서 실시간으로 데이터를 S3, Redshift, ElasticSearch 등의 목적지에 수집할 수 있습니다.
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
@@ -57,8 +67,8 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
 \[[Top](#Top)\]
 
-### 데이터를 Kinesis Firehose를 이용해서 수집하기
-생성한 Firehose가 정상적으로 데이터를 수집하는지 확인해봅니다.
+## <a name="kinesis-data-pipeline"></a>데이터를 Kinesis Firehose를 이용해서 수집하기
+샘플 데이터를 이용해서 `Kinesis Data Streams -> Kinesis Data Firehose -> S3` 로 데이터가 정상적으로 수집되는지 확인합니다.
 1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
 2. gen_kinesis_data.py을 실행합니다.
     ```shell script
@@ -82,18 +92,20 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
       --dry-run
     
     $ python3 gen_kinesis_data.py -I resources/online_retail_II.csv \
-    --service-name firehose \
+    --service-name kinesis \
     --out-format json \
     --stream-name uk-online-retail-trans
     ```
 3. 매 초 데이터가 발생하는 것을 확인합니다. 충분한 데이터 수집을 위해 실행 중인 상태로 다음 단계를 진행합니다.
 4. 몇 분 뒤 생성한 S3 bucket에 가보면 생성된 원본 데이터가 Firehose를 통해 S3에 저장되는 것을 확인할 수 있습니다. 
 
-### Athena 테이블 생성
+\[[Top](#Top)\]
+
+## <a name="athena"></a>Athena를 이용해서 데이터 분석 하기
 Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이블을 만들고, 테이블을 쿼리한 다음 쿼리 결과를 확인할 수 있습니다.
 먼저 데이터를 쿼리하기 위해서 데이터베이스를 생성합니다.
 
-##### 1단계 데이터베이스 생성
+### 1단계 데이터베이스 생성
 1. Athena 콘솔을 엽니다.
 2. Athena 콘솔을 처음 방문하면 시작하기 페이지로 이동합니다. **\[Get Started\]** 를 선택해 쿼리 편집기를 엽니다. 
 처음 방문하는 경우가 아니라면 Athena 쿼리 편집기가 열립니다.
@@ -104,7 +116,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     ```
 5. 카탈로그 디스플레이가 새로 고쳐지고 왼쪽 **\[Catalog\]** 대시보드의 **\[DATABASE\]** 목록에 mydatabase가 표시되는지 확인합니다.
 
-##### 2단계: 테이블 생성
+### 2단계: 테이블 생성
 1. **\[DATABASE\]** 에 `mydatabase`가 선택되었는지 확인한 후 **\[New Query\]** 를 선택합니다.
 2. 쿼리 창에 다음 CREATE TABLE 문을 입력한 후 **\[Run Query\]** 를 선택합니다.
     ```buildoutcfg
@@ -137,7 +149,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     MSCK REPAIR TABLE mydatabase.retail_trans
     ```
 
-##### 3단계: 데이터 쿼리
+### 3단계: 데이터 쿼리
 1. **\[New Query\]** 를 선택하고 쿼리 창의 아무 곳에나 다음 문을 입력한 다음 **\[Run Query\]** 를 선택합니다.
     ```buildoutcfg
     SELECT *
@@ -146,8 +158,33 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     ```
 다음과 같은 형식의 결과가 반환됩니다.
 
+\[[Top](#Top)\]
 
-### Amazon Elasticsearch Service(Amazon ES)
+## <a name="amazon-quicksight-visualization"></a>QuickSight를 이용한 데이터 시각화
+이번에는 Amazon Quicksight를 통해 데이터 시각화 작업을 합니다.
+1. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
+2. Quicksight에 가입하기 위해 Sign up for QuickSight 버튼을 클릭합니다.
+3. Standard Edition을 선택한 후 Continue 버튼을 클릭합니다.
+4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고 Notification email address는 개인 Email 주소를 입력합니다. QuckSight가 S3에 Access해야 하므로, Choose S3 buckets를 클릭하여 `aws-analytics-immersion-day-2020-apne2` 를 선택한 후 Finish를 클릭합니다.
+5. 계정이 생성된 후 Go to Amazon Quicksight 버튼을 클릭합니다.
+6. 좌측 상단 New Analysis를 클릭합니다.
+7. New Data Set 버튼을 클릭합니다.
+8. Athena를 클릭하고 팝업 창의 Data source name에 `uk-retail-quicksight` 를 입력(임의의 값 입력 가능)하고 Create data source버튼을 클릭합니다.
+9. Choose your table에서 Database는 `XXXX`, Tables는 `retail-json` 를 선택하고 Select 버튼을 클릭합니다.
+10. Visualize 버튼을 클릭한 후 `retail-json` 테이블 데이터가 Quicksight SPICE 엔진에 로딩 되었는지 확인합니다.
+11. InvoicdDate 별 Quantity를 시각화 해 보겠습니다. 좌측 Fields list에서 invoicedate, quantity field를 차례대로 클릭합니다. Visual types는 세로 막대 그래프를 선택합니다.
+12. 그래프 상단 invoicedate 를 클릭하고 Aggregate: Day를 Quarter로 변경합니다.
+13. 분기별로 데이터가 집계 되었습니다.
+14. 방금 만든 Dashboard를 다른 사용자에게 공유해 보겠습니다. 좌측 상단 유저 아이콘을 클릭하고 Manage QuickSight를 클릭합니다.
+15. Invite users 버튼을 클릭한 후 임의의 사용자 계정명(BI_user01)을 입력한 후 우측 [+] 버튼을 클릭합니다. Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM User는 NO를 선택한 후 Invite 버튼을 클릭합니다.
+16. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
+17. QuickSight 화면으로 돌아가서 우측 상단의 Share > Share analysis를 클릭합니다.
+18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
+19. 사용자는 다음과 같은 Email을 수신합니다. Click to View를 클릭하여 분석결과를 확인할 수 있습니다.
+
+\[[Top](#Top)\]
+
+## <a name="amazon-es"></a>실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기
 실시간으로 데이터를 저장하고, 분석하기 위해서 Elasticsearch cluster를 생성합니다.
 Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메인은 설정, 인스턴스 유형, 인스턴스 수, 스토리지 리소스를 지정한 설정입니다.
 
@@ -196,18 +233,20 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 18. **\[Next\]** 를 선택합니다.
 19. **Review** 페이지에서 도메인 구성을 검토한 다음 **확인**을 선택합니다.
 
-### AWS Lambda
+\[[Top](#Top)\]
+
+## <a name="aws-lambda-function"></a>실시간 데이터를 AWS Lambda Function을 이용해서 ElasticSearch에 수집 하기
 Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
 이번 실습에서는 AWS Lambda 콘솔을 사용하여 Lambda 함수를 생성합니다.
 
-##### Lambda 함수에서 사용할 공통 라이브러를 Layers에 추가하려면,
+### Lambda 함수에서 사용할 공통 라이브러를 Layers에 추가하려면,
 1. **AWS Lambda 콘솔** 을 엽니다.
 2. **Layers** 메뉴에 들어가서 **\[Create layer\]** 을 선택합니다.
 3. Name에 `es-lib` 를 입력합니다.
 4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url을 입력합니다.
 5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
 
-##### Lambda 함수를 생성하려면,
+### Lambda 함수를 생성하려면,
 1. **AWS Lambda 콘솔** 을 엽니다.
 2. **\[Create a function\]** 을 선택합니다.
 3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
@@ -243,24 +282,15 @@ security groups을 선택합니다.
 19. Basic settings에서 **\[Edit\]** 선택합니다.
 20. Memory와 Timeout을 알맞게 조정합니다. 이번 실습에서는 Timout을 `5 min` 으로 설정합니다.
 
-### Amazon Quicksight
-이번에는 Amazon Quicksight를 통해 데이터를 시각화 해 보도록 하겠습니다.
-1. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
-2. Quicksight에 가입하기 위해 Sign up for QuickSight 버튼을 클릭합니다.
-3. Standard Edition을 선택한 후 Continue버튼을 클릭합니다.
-4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고 Notification email address는 개인 Email 주소를 입력합니다. QuckSight가 S3에 Access해야 하므로, Choose S3 buckets를 클릭하여 `aws-analytics-immersion-day-2020-apne2` 를 선택한 후 Finish를 클릭합니다.
-5. 계정이 생성된 후 Go to Amazon Quicksight 버튼을 클릭합니다.
-6. 좌측 상단 New Analysis를 클릭합니다.
-7. New Data Set 버튼을 클릭합니다.
-8. Athena를 클릭하고 팝업 창의 Data source name에 `uk-retail-quicksight` 를 입력(임의의 값 입력 가능)하고 Create data source버튼을 클릭합니다.
-9. Choose your table에서 Database는 `XXXX`, Tables는 `retail-json` 를 선택하고 Select 버튼을 클릭합니다.
-10. Visualize 버튼을 클릭한 후 `retail-json` 테이블 데이터가 Quicksight SPICE 엔진에 로딩 되었는지 확인합니다.
-11. InvoicdDate 별 Quantity를 시각화 해 보겠습니다. 좌측 Fields list에서 invoicedate, quantity field를 차례대로 클릭합니다. Visual types는 세로 막대 그래프를 선택합니다.
-12. 그래프 상단 invoicedate 를 클릭하고 Aggregate: Day를 Quarter로 변경합니다.
-13. 분기별로 데이터가 집계 되었습니다.
-14. 방금 만든 Dashboard를 다른 사용자에게 공유해 보겠습니다. 좌측 상단 유저 아이콘을 클릭하고 Manage QuickSight를 클릭합니다.
-15. Invite users 버튼을 클릭한 후 임의의 사용자 계정명(BI_user01)을 입력한 후 우측 [+] 버튼을 클릭합니다. Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM User는 NO를 선택한 후 Invite 버튼을 클릭합니다.
-16. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
-17. QuickSight 화면으로 돌아가서 우측 상단의 Share > Share analysis를 클릭합니다.
-18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
-19. 사용자는 다음과 같은 Email을 수신합니다. Click to View를 클릭하여 분석결과를 확인할 수 있습니다.
+\[[Top](#Top)\]
+
+## <a name="amazon-es-kibana-visualization"></a>Kibana를 이용한 데이터 시작화
+Amazon Elasticsearch Service에서 수집된 데이터를 Kibana를 이용해서 시각화 작업을 합니다.
+
+\[[Top](#Top)\]
+
+## Recap and Review
+이 실습을 통해서 데이터 파이프라인을 만들어서 실시간 데이터 처리와 배치 데이터 처리 layer로 구성된
+Lambda Architecture 구조의 Business Intelligent System을 구축해 보셨습니다.
+
+\[[Top](#Top)\]
