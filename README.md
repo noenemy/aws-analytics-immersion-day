@@ -24,7 +24,7 @@
 
 ## <a name="preliminaries"></a>사전 준비 작업
 실습을 시작 하기 전에 필요한 IAM User, EC2를 생성하고 및 구성합니다.
- - [실습 환경 준비 하기](prerequisites.md)
+ - [실습 환경 준비 하기](./doc_sources/prerequisites.md)
  
 \[[Top](#Top)\]
 
@@ -111,7 +111,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 
 ![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
-### 1단계 데이터베이스 생성
+### 1단계: 데이터베이스 생성
 1. Athena 콘솔을 엽니다.
 2. Athena 콘솔을 처음 방문하면 시작하기 페이지로 이동합니다. **\[Get Started\]** 를 선택해 쿼리 편집기를 엽니다. 
 처음 방문하는 경우가 아니라면 Athena 쿼리 편집기가 열립니다.
