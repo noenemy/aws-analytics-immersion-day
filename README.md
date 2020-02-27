@@ -2,7 +2,7 @@
 
 이 실습의 목적은 Businesss Intelligence System을 aws의 analytics 서비스를 활용해서 구현해 보는 것 입니다.
 이 실습을 통해서 `데이터 수집 -> 저장 -> 분석/처리 -> 시각화` 단계를 aws analytics 서비스를 이용해서
-어떻게 구축할 수 있는지 경험하실 수 있습니다.
+어떻게 구축할 수 있는지 경험할 수 있습니다.
 
 ## Table of Contents
 * [Solutions Architecture Overview](#solutions-architecture-overview)
@@ -14,7 +14,7 @@
 * [\[Step-1e\] QuickSight를 이용한 데이터 시각화](#amazon-quicksight-visualization)
 * [\[Step-2a\] 실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기](#amazon-es)
 * [\[Step-2b\] AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기](#amazon-lambda-function)
-* [\[Step-2c\] Kibana를 이용한 데이터 시작화](#amazon-es-kibana-visualization)
+* [\[Step-2c\] Kibana를 이용한 데이터 시각화](#amazon-es-kibana-visualization)
 * [Recap and Review](#recap-and-review)
 
 ## <a name="solutions-architecture-overview"></a>Solutions Architecture Overview
@@ -286,7 +286,7 @@ security groups을 선택합니다.
 
 \[[Top](#Top)\]
 
-## <a name="amazon-es-kibana-visualization"></a>Kibana를 이용한 데이터 시작화
+## <a name="amazon-es-kibana-visualization"></a>Kibana를 이용한 데이터 시각화
 Amazon Elasticsearch Service에서 수집된 데이터를 Kibana를 이용해서 시각화 작업을 합니다.
 
 \[[Top](#Top)\]
