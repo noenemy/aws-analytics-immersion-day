@@ -70,6 +70,9 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 
 ## <a name="kinesis-data-pipeline"></a>데이터 파이프라인 동작 확인 하기
 샘플 데이터를 이용해서 `Kinesis Data Streams -> Kinesis Data Firehose -> S3` 로 데이터가 정상적으로 수집되는지 확인합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
+
 1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
 2. gen_kinesis_data.py을 실행합니다.
     ```shell script
@@ -105,6 +108,8 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 ## <a name="athena"></a>Athena를 이용해서 데이터 분석 하기
 Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이블을 만들고, 테이블을 쿼리한 다음 쿼리 결과를 확인할 수 있습니다.
 먼저 데이터를 쿼리하기 위해서 데이터베이스를 생성합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 ### 1단계 데이터베이스 생성
 1. Athena 콘솔을 엽니다.
@@ -164,6 +169,9 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 
 ## <a name="amazon-quicksight-visualization"></a>QuickSight를 이용한 데이터 시각화
 이번에는 Amazon Quicksight를 통해 데이터 시각화 작업을 합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
+
 1. Quicksight 콘솔로 이동합니다. https://quicksight.aws.amazon.com 
 2. Quicksight에 가입하기 위해 Sign up for QuickSight 버튼을 클릭합니다.
 3. Standard Edition을 선택한 후 Continue 버튼을 클릭합니다.
@@ -189,6 +197,8 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 ## <a name="amazon-es"></a>실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기
 실시간으로 데이터를 저장하고, 분석하기 위해서 Elasticsearch cluster를 생성합니다.
 Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메인은 설정, 인스턴스 유형, 인스턴스 수, 스토리지 리소스를 지정한 설정입니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 **Amazon ES 도메인을 만들려면(콘솔)**
 1. https://aws.amazon.com으로 이동하여 Sign In to the Console(콘솔에 로그인)을 선택합니다.
@@ -288,6 +298,8 @@ security groups을 선택합니다.
 
 ## <a name="amazon-es-kibana-visualization"></a>Kibana를 이용한 데이터 시각화
 Amazon Elasticsearch Service에서 수집된 데이터를 Kibana를 이용해서 시각화 작업을 합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 \[[Top](#Top)\]
 
