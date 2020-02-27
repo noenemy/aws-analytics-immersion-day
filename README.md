@@ -55,6 +55,8 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 10. 새롭게 생성된 역할이 추가된 것을 확인한 뒤 Next 버튼을 클릭합니다.
 11. (Step 5: Review) Review에서 입력한 정보를 확인한 뒤 틀린 부분이 없다면 Create delivery stream 버튼을 클릭하여 Firehose 생성을 완료합니다.
 
+\[[Top](#Top)\]
+
 ### 데이터를 Kinesis Firehose를 이용해서 수집하기
 생성한 Firehose가 정상적으로 데이터를 수집하는지 확인해봅니다.
 1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
