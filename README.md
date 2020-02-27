@@ -153,7 +153,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
     OUTPUTFORMAT 
       'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
     LOCATION
-      's3://aws-analytics-immersion-day-2020-apne2/json-data'
+      's3://aws-analytics-immersion-day-xxxxxxxx/json-data'
     ```
     테이블 `retail_trans_json`가 생성되고 데이터베이스의 **\[Catalog\]** 대시보드에 표시됩니다.
 3. 테이블을 생성한 이후 **\[New Query(새 쿼리)\]** 를 선택하고 다음을 실행해서, 파티션의 데이터를 로드합니다.
