@@ -186,7 +186,7 @@ Notification email address는 개인 Email 주소를 입력합니다.
 QuckSight가 S3에 Access해야 하므로, **\[Choose S3 buckets\]** 를 클릭하여,
 `aws-analytics-immersion-day-xxxxxxxx` 를 선택한 후 Finish를 클릭합니다.
 5. 계정이 생성된 후 **\[Go to Amazon QuickSight\]** 버튼을 클릭합니다.
-6. 좌측 상단 **\[New Analysis\]**를 클릭합니다.
+6. 좌측 상단 **\[New Analysis\]** 를 클릭합니다.
 7. **\[New Data Set\]** 버튼을 클릭합니다.
 8. Athena를 클릭하고 팝업 창의 Data source name에 `retail-quicksight` 를 입력(임의의 값 입력 가능)하고, **\[Create data source\]** 버튼을 클릭합니다.
 9. Choose your table에서 Database는 `XXXX`, Tables는 `retail_trans_json` 를 선택하고 Select 버튼을 클릭합니다.
