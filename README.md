@@ -201,7 +201,7 @@ Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM Us
 16. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
 17. QuickSight 화면으로 돌아가서 우측 상단의 Share > Share analysis를 클릭합니다.
 18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
-19. 사용자는 다음과 같은 Email을 수신합니다. **\[Click to View\]**를 클릭하여 분석결과를 확인할 수 있습니다.
+19. 사용자는 다음과 같은 Email을 수신합니다. **\[Click to View\]** 를 클릭하여 분석결과를 확인할 수 있습니다.
 
 \[[Top](#Top)\]
 
