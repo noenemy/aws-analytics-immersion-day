@@ -71,6 +71,7 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
     wget 'https://github.com/ksmin23/aws-analytics-immersion-day-2020/archive/master.zip'
     unzip master.zip
     chown -R ec2-user:ec2-user $(ls --hide=*.zip)
+    yum -y install python36
     ```
     그리고, **\[Next: Add Storage\]** 을 클릭합니다.
 7. Step 4: Add Storage 화면에서 기본값을 그대로 두고 **\[Next: Add Tags\]** 를 클릭합니다.
