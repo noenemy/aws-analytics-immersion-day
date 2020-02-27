@@ -183,8 +183,8 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 3. Standard Edition을 선택한 후 Continue 버튼을 클릭합니다.
 4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고,
 Notification email address는 개인 Email 주소를 입력합니다.
-QuckSight가 S3에 Access해야 하므로, **\[Choose S3 buckets\]**를 클릭하여,
-`aws-analytics-immersion-day-2020-apne2` 를 선택한 후 Finish를 클릭합니다.
+QuckSight가 S3에 Access해야 하므로, **\[Choose S3 buckets\]** 를 클릭하여,
+`aws-analytics-immersion-day-xxxxxxxx` 를 선택한 후 Finish를 클릭합니다.
 5. 계정이 생성된 후 **\[Go to Amazon QuickSight\]** 버튼을 클릭합니다.
 6. 좌측 상단 **\[New Analysis\]**를 클릭합니다.
 7. **\[New Data Set\]** 버튼을 클릭합니다.
