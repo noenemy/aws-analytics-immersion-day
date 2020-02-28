@@ -331,6 +331,7 @@ security groups을 선택합니다.
 19. Basic settings에서 **\[Edit\]** 선택합니다. Memory와 Timeout을 알맞게 조정합니다. 이 실습에서는 Timout을 `5 min` 으로 설정합니다.
 20. 다시 Designer 탭으로 돌아가서 Add trigger를 선택합니다.
 Trigger configuration에서 `Select a trigger` 에서 **Kinesis** 를 선택하고, 앞서 생성한 Kinesis stream (`retail-trans`)를 선택 합니다.
+![aws-lambda-kinesis](./assets/aws-lambda-kinesis.png)
 
 \[[Top](#Top)\]
 
