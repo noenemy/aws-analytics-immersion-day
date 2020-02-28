@@ -267,7 +267,7 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 
 \[[Top](#Top)\]
 
-## <a name="aws-lambda-function"></a>AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기
+## <a name="amazon-lambda-function"></a>AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기
 Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
 이번 실습에서는 AWS Lambda 콘솔을 사용하여 Lambda 함수를 생성합니다.
 
