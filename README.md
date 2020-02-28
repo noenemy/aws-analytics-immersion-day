@@ -46,7 +46,8 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 2. Deliver streaming data with Kinesis Firehose delivery streams 메뉴의 **\[Create delivery stream\]** 을 클릭하여
 새로운 Firehose 전송 스트림 생성을 시작합니다.
 3. (Step 1: Name and source) Delivery stream name에 원하는 이름(예: `retail-trans`)를 입력합니다.
-4. **Choose a source** 에서 `Kinesis Data Stream` 를 선택하고, 앞서 생성한 Kinesis Data Stream을 선택 한 후, **Next**를 클릭합니다.
+4. **Choose a source** 에서 `Kinesis Data Stream` 를 선택하고, 앞서 생성한 Kinesis Data Stream(예: `retail-trans`)을 선택 한 후,
+**Next**를 클릭합니다.
 5. (Step 2: Process records) **Transform source records with AWS Lambda / Convert record format** 은 
 둘다 default 옵션 `Disabled`를 선택하고 **Next**를 클릭합니다.
 6. (Step 3: Choose a destination) Destination은 Amazon S3를 선택하고, `Create new` 를 클릭해서 S3 bucket을 생성합니다.
@@ -156,7 +157,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
       's3://aws-analytics-immersion-day-xxxxxxxx/json-data'
     ```
     테이블 `retail_trans_json`가 생성되고 데이터베이스의 **\[Catalog\]** 대시보드에 표시됩니다.
-3. 테이블을 생성한 이후 **\[New Query(새 쿼리)\]** 를 선택하고 다음을 실행해서, 파티션의 데이터를 로드합니다.
+3. 테이블을 생성한 이후 **\[New Query\]** 를 선택하고 다음을 실행해서, 파티션의 데이터를 로드합니다.
     ```buildoutcfg
     MSCK REPAIR TABLE mydatabase.retail_trans_json
     ```
@@ -180,18 +181,27 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 
 1. [QuickSight 콘솔](https://quicksight.aws.amazon.com)로 이동합니다.
 2. QuickSight에 가입하기 위해 **\[Sign up for QuickSight\]** 버튼을 클릭합니다.
-3. Standard Edition을 선택한 후 Continue 버튼을 클릭합니다.
-4. Quicksight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고,
+3. Standard Edition을 선택한 후 **\[Continue\]** 버튼을 클릭합니다.
+4. QuickSight account name은 임의로 지정(중복될 경우 계정이 생성되지 않습니다) 하고,
 Notification email address는 개인 Email 주소를 입력합니다.
 QuckSight가 S3에 Access해야 하므로, **\[Choose S3 buckets\]** 를 클릭하여,
-`aws-analytics-immersion-day-xxxxxxxx` 를 선택한 후 Finish를 클릭합니다.
+`aws-analytics-immersion-day-xxxxxxxx` 를 선택한 후 **\[Finish\]** 를 클릭합니다.
 5. 계정이 생성된 후 **\[Go to Amazon QuickSight\]** 버튼을 클릭합니다.
-6. 좌측 상단 **\[New Analysis\]** 를 클릭합니다.
+6. 우측 상단에 region이 데이터를 저장하고 있는 S3 bucket의 region과 동일하게 설정한 후, 
+좌측 상단 **\[New Analysis\]** 를 클릭합니다.
 7. **\[New Data Set\]** 버튼을 클릭합니다.
-8. Athena를 클릭하고 팝업 창의 Data source name에 `retail-quicksight` 를 입력(임의의 값 입력 가능)하고, **\[Create data source\]** 버튼을 클릭합니다.
-9. Choose your table에서 Database는 `XXXX`, Tables는 `retail_trans_json` 를 선택하고 Select 버튼을 클릭합니다.
-10. Visualize 버튼을 클릭한 후 `retail_trans_json` 테이블 데이터가 Quicksight SPICE 엔진에 로딩 되었는지 확인합니다.
-11. InvoicdDate 별 Quantity를 시각화 해 보겠습니다. 좌측 Fields list에서 invoicedate, quantity field를 차례대로 클릭합니다. Visual types는 세로 막대 그래프를 선택합니다.
+![aws-quicksight-new_data_sets](./assets/aws-quicksight-new_data_sets.png)
+8. `Athena` 를 클릭하고 팝업 창의 Data source name에 `retail-quicksight` 를 입력(임의의 값 입력 가능)하고,
+**\[Validate connection\]** 을 클릭 해서 `Validated` 상태로 변경되면, **\[Create data source\]** 버튼을 클릭합니다.
+![aws-quicksight-athena_data_source](./assets/aws-quicksight-athena_data_source.png)
+9. Choose your table 화면에서 Database는 `mydatabase` (앞서 생성한 Athena 데이터베이스),
+Tables 에서 `retail_trans_json` 를 선택하고 Select 버튼을 클릭합니다.
+![aws-quicksight-athena-choose_your_table](./assets/aws-quicksight-athena-choose_your_table.png)
+10. Finish data set creation 화면에서 **\[Visualize\]** 버튼을 클릭 합니다.
+`retail_trans_json` 테이블 데이터가 QuickSight SPICE 엔진에 로딩 되었는지 확인합니다.
+11. `InvoicdDate` 별 `Quantity`, `Price`를 시각화 해 보겠습니다. 좌측 Fields list에서 `invoicedate`, `price`, `quantity` field를 차례대로 선택합니다.
+Visual types는 세로 막대 그래프를 선택합니다.
+![aws-quicksight-bar-chart](./assets/aws-quicksight-bar-chart.png)
 12. 그래프 상단 invoicedate 를 클릭하고 \[Aggregate: Day\]를 **Quarter** 로 변경합니다.
 13. 분기별로 데이터가 집계 되었습니다.
 ![aws-quicksight-quarterly-graph](./assets/aws-quicksight-quarterly-graph.png)
@@ -265,8 +275,9 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 1. **AWS Lambda 콘솔** 을 엽니다.
 2. **Layers** 메뉴에 들어가서 **\[Create layer\]** 을 선택합니다.
 3. Name에 `es-lib` 를 입력합니다.
-4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url을 입력합니다.
+4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url 또는 압축한 라이브러리 코드 파일을 입력합니다.
 5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
+![aws-lambda-create-layer](./assets/aws-lambda-create-layer.png)
 
 ### Lambda 함수를 생성하려면,
 1. **AWS Lambda 콘솔** 을 엽니다.
@@ -274,8 +285,16 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
 4. Runtime 에서 `Python 3.8` 을 선택합니다.
 5. **\[Create a function\]** 을 선택합니다.
+![aws-lambda-create-function](./assets/aws-lambda-create-function.png)
 6. Designer(디자이너) 에서 layers를 선택합니다. Layers에서 Add a layer를 선택합니다.
-7. Layer selection에서 Compatiable layers에서 Name과 Version으로 앞서 생성한 layer의 Name과 Version을 선택합니다.
+7. Layer selection에서 `Select from list of runtime compatible layers`을 클릭하고, 
+Compatiable layers에서 Name과 Version으로 앞서 생성한 layer의 Name과 Version을 선택합니다.
+![aws-lambda-add-layer-to-function](./assets/aws-lambda-add-layer-to-function.png)
+Layer의 runtime 버전과 Lambda function의 runtime이 버전이 다른 경우, Layer selection의 Compatiable layers에 필요한 layer가
+목록에 보이지 않을 수 있습니다. 
+이러한 경우, Layer selection에서 `Provide a layer version ARN`을 클릭하고,
+layer의 arn을 직접 입력하면 됩니다.
+![aws-lambda-add-layer-to-function-layer-version-arn](./assets/aws-lambda-add-layer-to-function-layer-version-arn.png)
 8. **\[Add\]** 클릭합니다.
 9. Designer(디자이너) 에서 `UpsertToES` 을 선택하여 함수의 코드 및 구성으로 돌아갑니다.
 10. **\[Add trigger\]** 를 선택합니다.
@@ -299,10 +318,15 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
     DATE_TYPE_FIELDS=InvoiceDate
     ```
 17. **\[Save\]** 선택합니다.
-18. VPC 항목에서 Elasticsearch service의 도메인을 생성한 VPC와 subnets을 선택하고, Elasticsearch service 도메인에 접근이 허용된
+18. IAM Role 수정이 필요
+- AWSLambdaVPCAccessExecutionRole
+- AmazonKinesisReadOnlyAccess
+18. VPC 항목에서 **\[Edit\]** 버튼을 클릭해서 Edit VPC 화면으로 이동 한다. VPC connection 에서 `Custom VPC` 를 선택합니다.
+Elasticsearch service의 도메인을 생성한 VPC와 subnets을 선택하고, Elasticsearch service 도메인에 접근이 허용된
 security groups을 선택합니다.
-19. Basic settings에서 **\[Edit\]** 선택합니다.
-20. Memory와 Timeout을 알맞게 조정합니다. 이 실습에서는 Timout을 `5 min` 으로 설정합니다.
+19. Basic settings에서 **\[Edit\]** 선택합니다. Memory와 Timeout을 알맞게 조정합니다. 이 실습에서는 Timout을 `5 min` 으로 설정합니다.
+20. 다시 Designer 탭으로 돌아가서 Add trigger를 선택합니다.
+Trigger configuration에서 `Select a trigger` 에서 **Kinesis** 를 선택하고, 앞서 생성한 Kinesis stream (`retail-trans`)를 선택 합니다.
 
 \[[Top](#Top)\]
 
