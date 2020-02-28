@@ -318,9 +318,13 @@ layer의 arn을 직접 입력하면 됩니다.
     DATE_TYPE_FIELDS=InvoiceDate
     ```
 17. **\[Save\]** 선택합니다.
-18. IAM Role 수정이 필요
-- AWSLambdaVPCAccessExecutionRole
-- AmazonKinesisReadOnlyAccess
+18. lambda 함수를 VPC 내에서 실행 하고, Kinesis Data Streams에서 데이터를 읽기 위해서,
+lamba 함수 실행에 필요한 Execution role에 필요한 IAM Policy를 추가햐야 합니다.
+IAM Role 수정을 위해서 `View the UpsertToES-role-XXXXXXXX role on the IAM console.` 을 클릭 합니다.
+![aws-lambda-execution-iam-role](./assets/aws-lambda-execution-iam-role.png)
+19. IAM Role의 **\[Permissions\]** 탭에서 **\[Attach policies\]** 버튼을 클릭 후, 
+**AWSLambdaVPCAccessExecutionRole**, **AmazonKinesisReadOnlyAccess** 를 차례로 추가 합니다.
+![aws-lambda-iam-role-policies](./assets/aws-lambda-iam-role-policies.png)
 18. VPC 항목에서 **\[Edit\]** 버튼을 클릭해서 Edit VPC 화면으로 이동 한다. VPC connection 에서 `Custom VPC` 를 선택합니다.
 Elasticsearch service의 도메인을 생성한 VPC와 subnets을 선택하고, Elasticsearch service 도메인에 접근이 허용된
 security groups을 선택합니다.
