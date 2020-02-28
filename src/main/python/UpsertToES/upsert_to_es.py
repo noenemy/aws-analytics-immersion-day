@@ -62,7 +62,7 @@ def lambda_handler(event, context):
       payload = base64.b64decode(record['kinesis']['data']).decode('utf-8')
       json_data = json.loads(payload)
 
-      if not all([json_data.get(k, None) for k in REQUIRED_FIELDS]):
+      if not any([json_data.get(k, None) for k in REQUIRED_FIELDS]):
         counter['invalid'] += 1
         continue
 
@@ -83,12 +83,13 @@ def lambda_handler(event, context):
       counter['errors'] += 1
       traceback.print_exc()
 
-  try:
-    es_bulk_body = '\n'.join([json.dumps(e) for e in doc_list])
-    res = es_client.bulk(body=es_bulk_body, index=ES_INDEX, refresh=True)
-  except Exception as ex:
-    counter['index_errors'] += 1
-    traceback.print_exc()
+  if doc_list:
+    try:
+      es_bulk_body = '\n'.join([json.dumps(e) for e in doc_list])
+      res = es_client.bulk(body=es_bulk_body, index=ES_INDEX, refresh=True)
+    except Exception as ex:
+      counter['index_errors'] += 1
+      traceback.print_exc()
 
   print('[INFO]', ', '.join(['{}={}'.format(k, v) for k, v in counter.items()]), file=sys.stderr)
 
@@ -97,7 +98,8 @@ if __name__ == '__main__':
   kinesis_data = [
     '''{"Invoice": "489434", "StockCode": "85048", "Description": "15CM CHRISTMAS GLASS BALL 20 LIGHTS", "Quantity": 12, "InvoiceDate": "2009-12-01 07:45:00", "Price": 6.95, "Customer_ID": "13085.0", "Country": "United Kingdom"}''',
     '''{"Invoice": "489435", "StockCode": "22350", "Description": "CAT BOWL ", "Quantity": 12, "InvoiceDate": "2009-12-01 07:46:00", "Price": 2.55, "Customer_ID": "13085.0", "Country": "United Kingdom"}''',
-    '''{"Invoice": "489436", "StockCode": "48173C", "Description": "DOOR MAT BLACK FLOCK ", "Quantity": 10, "InvoiceDate": "2009-12-01 09:06:00", "Price": 5.95, "Customer_ID": "13078.0", "Country": "United Kingdom"}'''
+    '''{"Invoice": "489436", "StockCode": "48173C", "Description": "DOOR MAT BLACK FLOCK ", "Quantity": 10, "InvoiceDate": "2009-12-01 09:06:00", "Price": 5.95, "Customer_ID": "13078.0", "Country": "United Kingdom"}''',
+    '''{"Invoice": "491970", "StockCode": "21218", "Description": "RED SPOTTY BISCUIT TIN", "Quantity": 2, "InvoiceDate": "2009-12-14 18:03:00", "Price": 8.65, "Customer_ID": "", "Country": "United Kingdom"}''',
   ]
 
   records = [{
