@@ -297,13 +297,9 @@ layer의 arn을 직접 입력하면 됩니다.
 ![aws-lambda-add-layer-to-function-layer-version-arn](./assets/aws-lambda-add-layer-to-function-layer-version-arn.png)
 8. **\[Add\]** 클릭합니다.
 9. Designer(디자이너) 에서 `UpsertToES` 을 선택하여 함수의 코드 및 구성으로 돌아갑니다.
-10. **\[Add trigger\]** 를 선택합니다.
-11. **Trigger configuration** 에서 Kinesis를 선택 합니다.
-12. Kinesis stream 에서 앞서 생성한 Kinesis Data Stream을 선택합니다.
-13. **\[Add\]** 를 선택합니다.
-14. Function code의 코드 편집기에 `upsert_to_es.py` 파일의 코드를 복사해서 붙여넣습니다.
-15. Environment variables 에서 **\[Edit\]** 를 클릭합니다.
-16. **\[Add environment variables\]** 를 클릭해서 아래 4개의 Environment variables을 등록합니다.
+10. Function code의 코드 편집기에 `upsert_to_es.py` 파일의 코드를 복사해서 붙여넣습니다.
+11. Environment variables 에서 **\[Edit\]** 를 클릭합니다.
+12. **\[Add environment variables\]** 를 클릭해서 아래 4개의 Environment variables을 등록합니다.
     ```shell script
     ES_HOST=<elasticsearch service domain>
     REQUIRED_FIELDS=Invoice,StockCode,Customer_ID
@@ -317,20 +313,22 @@ layer의 arn을 직접 입력하면 됩니다.
     REGION_NAME=us-west-1
     DATE_TYPE_FIELDS=InvoiceDate
     ```
-17. **\[Save\]** 선택합니다.
-18. lambda 함수를 VPC 내에서 실행 하고, Kinesis Data Streams에서 데이터를 읽기 위해서,
+13. **\[Save\]** 선택합니다.
+14. lambda 함수를 VPC 내에서 실행 하고, Kinesis Data Streams에서 데이터를 읽기 위해서,
 lamba 함수 실행에 필요한 Execution role에 필요한 IAM Policy를 추가햐야 합니다.
 IAM Role 수정을 위해서 `View the UpsertToES-role-XXXXXXXX role on the IAM console.` 을 클릭 합니다.
 ![aws-lambda-execution-iam-role](./assets/aws-lambda-execution-iam-role.png)
-19. IAM Role의 **\[Permissions\]** 탭에서 **\[Attach policies\]** 버튼을 클릭 후, 
+15. IAM Role의 **\[Permissions\]** 탭에서 **\[Attach policies\]** 버튼을 클릭 후, 
 **AWSLambdaVPCAccessExecutionRole**, **AmazonKinesisReadOnlyAccess** 를 차례로 추가 합니다.
 ![aws-lambda-iam-role-policies](./assets/aws-lambda-iam-role-policies.png)
-18. VPC 항목에서 **\[Edit\]** 버튼을 클릭해서 Edit VPC 화면으로 이동 한다. VPC connection 에서 `Custom VPC` 를 선택합니다.
+16. VPC 항목에서 **\[Edit\]** 버튼을 클릭해서 Edit VPC 화면으로 이동 한다. VPC connection 에서 `Custom VPC` 를 선택합니다.
 Elasticsearch service의 도메인을 생성한 VPC와 subnets을 선택하고, Elasticsearch service 도메인에 접근이 허용된
 security groups을 선택합니다.
-19. Basic settings에서 **\[Edit\]** 선택합니다. Memory와 Timeout을 알맞게 조정합니다. 이 실습에서는 Timout을 `5 min` 으로 설정합니다.
-20. 다시 Designer 탭으로 돌아가서 Add trigger를 선택합니다.
-Trigger configuration에서 `Select a trigger` 에서 **Kinesis** 를 선택하고, 앞서 생성한 Kinesis stream (`retail-trans`)를 선택 합니다.
+17. Basic settings에서 **\[Edit\]** 선택합니다. Memory와 Timeout을 알맞게 조정합니다. 이 실습에서는 Timout을 `5 min` 으로 설정합니다.
+18. 다시 Designer 탭으로 돌아가서 **\[Add trigger\]** 를 선택합니다.
+19. **Trigger configuration** 의 `Select a trigger` 에서 **Kinesis** 를 선택 합니다.
+20. Kinesis stream 에서 앞서 생성한 Kinesis Data Stream(`retail-trans`)을 선택합니다.
+21. **\[Add\]** 를 선택합니다.
 ![aws-lambda-kinesis](./assets/aws-lambda-kinesis.png)
 
 \[[Top](#Top)\]
