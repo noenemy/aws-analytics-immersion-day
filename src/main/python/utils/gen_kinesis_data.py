@@ -42,7 +42,7 @@ def gen_records(options, reader):
 
   record_list = []
   for row in reader:
-    is_skip = random.randint(1, 47) % 19 < 5
+    is_skip = (random.randint(1, 47) % 19 < 5) if options.random_select else False
     if is_skip:
       continue
 
@@ -120,22 +120,27 @@ def main():
 
   parser.add_argument('-I', '--input-file', help='The input file path ex) ./resources/online_retail_II.csv')
   parser.add_argument('--out-format', default='csv', choices=['csv', 'tsv', 'json'])
-  parser.add_argument('--service-name', default='kinesis', choices=['kinesis', 'firehose'])
+  parser.add_argument('--service-name', default='console', choices=['kinesis', 'firehose', 'console'])
   parser.add_argument('--stream-name', help='The name of the stream to put the data record into.')
   parser.add_argument('--max-count', default=10, type=int, help='The max number of records to put.')
+  parser.add_argument('--random-select', action='store_true')
   parser.add_argument('--dry-run', action='store_true')
 
   options = parser.parse_args()
   with open(options.input_file, newline='') as csvfile:
     reader = csv.DictReader(csvfile)
-    client = boto3.client(options.service_name)
+    client = boto3.client(options.service_name) if options.service_name != 'console' else None
+    counter = 0
     for records in gen_records(options, reader):
       if options.service_name == 'kinesis':
         put_records_to_kinesis(client, options, records)
       elif options.service_name == 'firehose':
         put_records_to_firehose(client, options, records)
       else:
-        pass
+        print('\n'.join([e for e in records]))
+      counter += 1
+      if counter % 100 == 0:
+        print('[INFO] {} records are processed'.format(counter), file=sys.stderr)
       time.sleep(random.choices([0.01, 0.03, 0.05, 0.07, 0.1])[-1])
 
 
