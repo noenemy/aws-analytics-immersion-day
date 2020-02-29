@@ -360,7 +360,7 @@ Index pattern에 `retail*` 을 입력합니다.
 Time Filter field name에 `InvoiceDate` 를 선택합니다.
 ![kibana-02b-create-index-pattern-configure-settings](./assets/kibana-02b-create-index-pattern-configure-settings.png)
 8. (Management / Create index pattern) **\[Create index pattern\]** 을 클릭합니다.
-![kibana-02c-create-index-pattern-review](./assets/kibana-02c-create-index-pattern-review)
+![kibana-02c-create-index-pattern-review](./assets/kibana-02c-create-index-pattern-review.png)
 9. (Discover) Index pattern 생성을 완료 후, Discover를 선택해서 Elasticsearch 수집된 데이터를 확인합니다.
 ![kibana-03-discover](./assets/kibana-03-discover.png)
 10. (Discover) `InvoicdDate` 별 `Quantity`를 시각화 해 보겠습니다. 좌측의 Available fields에서 invoicdDate를
