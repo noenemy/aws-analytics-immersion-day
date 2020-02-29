@@ -138,7 +138,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
       `stockcode` string COMMENT 'Product (item) code', 
       `description` string COMMENT 'Product (item) name', 
       `quantity` int COMMENT 'The quantities of each product (item) per transaction', 
-      `invoicedate` string COMMENT 'Invoice date and time', 
+      `invoicedate` timestamp COMMENT 'Invoice date and time', 
       `price` float COMMENT 'Unit price', 
       `customer_id` string COMMENT 'Customer number', 
       `country` string COMMENT 'Country name')
