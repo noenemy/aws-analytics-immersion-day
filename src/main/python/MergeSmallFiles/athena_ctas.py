@@ -113,12 +113,20 @@ def lambda_handler(event, context):
 
 
 if __name__ == '__main__':
+  import argparse
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-dt', '--basic-datetime', default=datetime.datetime.today().strftime('%Y-%m-%dT%H:05:00Z'),
+    help='The scheduled event occurrence time ex) 2020-02-28T03:05:00Z')
+
+  options = parser.parse_args()
+
   event = {
     "id": "cdc73f9d-aea9-11e3-9d5a-835b769c0d9c",
     "detail-type": "Scheduled Event",
     "source": "aws.events",
     "account": "{{{account-id}}}",
-    "time": datetime.datetime.today().strftime('%Y-%m-%dT%H:05:00Z'),
+    "time": options.basic_datetime,
     "region": "us-east-1",
     "resources": [
       "arn:aws:events:us-east-1:123456789012:rule/ExampleRule"
