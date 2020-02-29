@@ -276,6 +276,7 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 2. **Layers** 메뉴에 들어가서 **\[Create layer\]** 을 선택합니다.
 3. Name에 `es-lib` 를 입력합니다.
 4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url 또는 압축한 라이브러리 코드 파일을 입력합니다.
+(참고로 이 실습에서는 `resources/es-lib.zip` 파일을 사용합니다.)
 5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
 ![aws-lambda-create-layer](./assets/aws-lambda-create-layer.png)
 
