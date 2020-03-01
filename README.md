@@ -221,6 +221,8 @@ Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM Us
 Amazon Athena의 쿼리 성능 향상을 위해서 작은 파일들을 하나의 큰 파일로 합쳐주는 것이 좋습니다. 이러한 작업을 주기적으로 실행하기 위해서
 Athena의 CTAS(Create Table As Select) 쿼리를 실행하는 AWS Lambda function 함수를 생성하고자 합니다.
 
+![aws-analytics-system-build-steps-extra](./assets/aws-analytics-system-build-steps-extra.png)
+
 1. **AWS Lambda 콘솔** 을 엽니다.
 2. **\[Create a function\]** 을 선택합니다.
 3. Function name(함수 이름)에 `MergeSmallFiles` 을 입력합니다.
