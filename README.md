@@ -223,7 +223,7 @@ Athena의 CTAS(Create Table As Select) 쿼리를 실행하는 AWS Lambda functio
 
 1. **AWS Lambda 콘솔** 을 엽니다.
 2. **\[Create a function\]** 을 선택합니다.
-3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
+3. Function name(함수 이름)에 `MergeSmallFiles` 을 입력합니다.
 4. Runtime 에서 `Python 3.8` 을 선택합니다.
 5. **\[Create a function\]** 을 선택합니다.
 ![aws-athena-ctas-lambda-create-function](./assets/aws-athena-ctas-lambda-create-function.png)
