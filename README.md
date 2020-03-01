@@ -12,6 +12,7 @@
 * [\[Step-1c\] 데이터 파이프라인 동작 확인 하기](#kinesis-data-pipeline)
 * [\[Step-1d\] Athena를 이용해서 데이터 분석 하기](#athena)
 * [\[Step-1e\] QuickSight를 이용한 데이터 시각화](#amazon-quicksight-visualization)
+* [(Optional)\[Step-1f\] AWS Lambda Function을 이용해서 S3에 저장된 작은 파일들을 큰 파일로 합치기](#athena-ctas-lambda-function)
 * [\[Step-2a\] 실시간 데이터 분석을 위한 Amazon Elasticsearch Service 생성하기](#amazon-es)
 * [\[Step-2b\] AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기](#amazon-lambda-function)
 * [\[Step-2c\] Kibana를 이용한 데이터 시각화](#amazon-es-kibana-visualization)
@@ -80,7 +81,7 @@ S3 bucket 이름은 이번 실습에서는 `aws-analytics-immersion-day-xxxxxxxx
 
 ![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
-1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
+1. 앞서 생성한 E2 인스턴스에 SSH 접속을 합니다.
 2. `gen_kinesis_data.py`을 실행합니다.
     ```shell script
     $ python3 gen_kinesis_data.py --help
@@ -175,7 +176,7 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 \[[Top](#Top)\]
 
 ## <a name="amazon-quicksight-visualization"></a>QuickSight를 이용한 데이터 시각화
-이번에는 Amazon Quicksight를 통해 데이터 시각화 작업을 합니다.
+이번에는 Amazon QuickSight를 통해 데이터 시각화 작업을 합니다.
 
 ![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
@@ -212,6 +213,58 @@ Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM Us
 17. QuickSight 화면으로 돌아가서 우측 상단의 Share > Share analysis를 클릭합니다.
 18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
 19. 사용자는 다음과 같은 Email을 수신합니다. **\[Click to View\]** 를 클릭하여 분석결과를 확인할 수 있습니다.
+
+\[[Top](#Top)\]
+
+## <a name="athena-ctas-lambda-function"></a>(Optional) AWS Lambda Function을 이용해서 S3에 저장된 작은 파일들을 큰 파일로 합치기
+실시간으로 들어오는 데이터를 Kinesis Data Firehose를 이용해서 S3에 저장할 경우, 데이터 사이즈가 작은 파일들이 생성됩니다.
+Amazon Athena의 쿼리 성능 향상을 위해서 작은 파일들을 하나의 큰 파일로 합쳐주는 것이 좋습니다. 이러한 작업을 주기적으로 실행하기 위해서
+Athena의 CTAS(Create Table As Select) 쿼리를 실행하는 AWS Lambda function 함수를 생성하고자 합니다.
+
+1. **AWS Lambda 콘솔** 을 엽니다.
+2. **\[Create a function\]** 을 선택합니다.
+3. Function name(함수 이름)에 `UpsertToES` 을 입력합니다.
+4. Runtime 에서 `Python 3.8` 을 선택합니다.
+5. **\[Create a function\]** 을 선택합니다.
+![aws-athena-ctas-lambda-create-function](./assets/aws-athena-ctas-lambda-create-function.png)
+6. Designer 탭에 **\[Add trigger\]** 를 선택합니다.
+7. **Trigger configuration** 의 `Select a trigger` 에서 **CloudWatch Events/EventBridge** 를 선택 합니다.
+Rule에서 `Create a new rule` 선택하고, Rule name에 적절한 rule name(예: `MergeSmallFilesEvent`)을 입력 합니다.
+Rule type으로 `Schedule expression`을 선택하고, Schedule expression에 매시각 5분 마다 작업이 실행되도록,
+`cron(5 * * * *)` 입력합니다.
+![aws-athena-ctas-lambda-add-trigger](./assets/aws-athena-ctas-lambda-add-trigger.png)
+8. **Trigger configuration** 에서 **\[Add\]** 를 클릭합니다.
+9. Function code의 코드 편집기에 `athena_ctas.py` 파일의 코드를 복사해서 붙여넣습니다.
+10. **\[Add environment variables\]** 를 클릭해서 다음 Environment variables을 등록합니다.
+    ```shell script
+    OLD_DATABASE=<source database>
+    OLD_TABLE_NAME=<source table>
+    NEW_DATABASE=<destination database>
+    NEW_TABLE_NAME=<destination table>
+    WORK_GROUP=<athena workgroup>
+    OUTPUT_PREFIX=<destination s3 prefix>
+    STAGING_OUTPUT_PREFIX=<staging s3 prefix used by athena>
+    COLUMN_NAMES=<columns of source table excluding partition keys>
+    ```
+    예를 들어, 다음과 같이 Environment variables을 설정합니다.
+    ```buildoutcfg
+    OLD_DATABASE=mydatabase
+    OLD_TABLE_NAME=retail_trans_json
+    NEW_DATABASE=mydatabase
+    NEW_TABLE_NAME=ctas_retail_trans_parquet
+    WORK_GROUP=primary
+    OUTPUT_PREFIX=s3://aws-analytics-immersion-day-xxxxxxxx/parquet-retail-trans
+    STAGING_OUTPUT_PREFIX=s3://aws-analytics-immersion-day-xxxxxxxx/tmp
+    COLUMN_NAMES=invoice,stockcode,description,quantity,invoicedate,price,customer_id,country
+    ```
+11. Athena 쿼리를 수행하는데 필요한 IAM Policy를 추가하기 위해서 Execution role에서 
+`View the MergeSmallFiles-role-XXXXXXXX role on the IAM console.` 을 클릭 해서 IAM Role을 수정합니다.
+![aws-athena-ctas-lambda-execution-iam-role](./assets/aws-athena-ctas-lambda-execution-iam-role.png)
+12. IAM Role의 **\[Permissions\]** 탭에서 **\[Attach policies\]** 버튼을 클릭 후, 
+**AmazonAthenaFullAccess**, **AmazonS3FullAccess** 를 차례로 추가 합니다.
+![aws-athena-ctas-lambda-iam-role-policies](./assets/aws-athena-ctas-lambda-iam-role-policies.png)
+13. Basic settings에서 **\[Edit\]** 선택합니다. Memory와 Timeout을 알맞게 조정합니다.
+이 실습에서는 Timout을 `5 min` 으로 설정합니다.
 
 \[[Top](#Top)\]
 
@@ -303,9 +356,9 @@ layer의 arn을 직접 입력하면 됩니다.
 12. **\[Add environment variables\]** 를 클릭해서 아래 4개의 Environment variables을 등록합니다.
     ```shell script
     ES_HOST=<elasticsearch service domain>
-    REQUIRED_FIELDS=Invoice,StockCode,Customer_ID
+    REQUIRED_FIELDS=<primary key로 사용될 column 목록>
     REGION_NAME=<region-name>
-    DATE_TYPE_FIELDS=InvoiceDate
+    DATE_TYPE_FIELDS=<column 중, date 또는 timestamp 데이터 타입의 column>
     ```
     예를 들어, 다음과 같이 Environment variables을 설정합니다.
     ```buildoutcfg
