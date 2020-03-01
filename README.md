@@ -81,7 +81,7 @@ S3 bucket 이름은 이번 실습에서는 `aws-analytics-immersion-day-xxxxxxxx
 ![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 1. 앞서 생성한 EC2 인스턴스에 SSH 접속을 합니다.
-2. gen_kinesis_data.py을 실행합니다.
+2. `gen_kinesis_data.py`을 실행합니다.
     ```shell script
     $ python3 gen_kinesis_data.py --help
     usage: gen_kinesis_data.py [-h] [-I INPUT_FILE] [--out-format {csv,tsv,json}]
@@ -93,7 +93,7 @@ S3 bucket 이름은 이번 실습에서는 `aws-analytics-immersion-day-xxxxxxxx
       -h, --help            show this help message and exit
       -I INPUT_FILE, --input-file INPUT_FILE
                             The input file path ex)
-                            ./resources/online_retail_II.csv
+                            ./resources/online_retail.csv
       --out-format {csv,tsv,json}
       --service-name {kinesis,firehose}
       --stream-name STREAM_NAME
@@ -102,7 +102,7 @@ S3 bucket 이름은 이번 실습에서는 `aws-analytics-immersion-day-xxxxxxxx
                             The max number of records to put.
       --dry-run
     
-    $ python3 gen_kinesis_data.py -I resources/online_retail_II.csv \
+    $ python3 gen_kinesis_data.py -I resources/online_retail.csv \
     --service-name kinesis \
     --out-format json \
     --stream-name retail-trans
