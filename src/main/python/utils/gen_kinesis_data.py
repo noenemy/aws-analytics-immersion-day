@@ -118,7 +118,7 @@ def put_records_to_kinesis(client, options, records):
 def main():
   parser = argparse.ArgumentParser()
 
-  parser.add_argument('-I', '--input-file', help='The input file path ex) ./resources/online_retail_II.csv')
+  parser.add_argument('-I', '--input-file', help='The input file path ex) ./resources/online_retail.csv')
   parser.add_argument('--out-format', default='csv', choices=['csv', 'tsv', 'json'])
   parser.add_argument('--service-name', default='console', choices=['kinesis', 'firehose', 'console'])
   parser.add_argument('--stream-name', help='The name of the stream to put the data record into.')
