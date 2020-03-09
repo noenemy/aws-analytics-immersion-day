@@ -203,20 +203,17 @@ Tables 에서 `retail_trans_json` 를 선택하고 Select 버튼을 클릭합니
 11. `InvoicdDate` 별 `Quantity`, `Price`를 시각화 해 보겠습니다. 좌측 Fields list에서 `invoicedate`, `price`, `quantity` field를 차례대로 선택합니다.
 Visual types는 세로 막대 그래프를 선택합니다.
 ![aws-quicksight-bar-chart](./assets/aws-quicksight-bar-chart.png)
-12. 그래프 상단 invoicedate 를 클릭하고 \[Aggregate: Day\]를 **Quarter** 로 변경합니다.
-13. 분기별로 데이터가 집계 되었습니다.
-![aws-quicksight-quarterly-graph](./assets/aws-quicksight-quarterly-graph.png)
-14. 방금 만든 Dashboard를 다른 사용자에게 공유해 보겠습니다. 좌측 상단 유저 아이콘을 클릭하고 \[Manage QuickSight\] 를 클릭합니다.
-15. Invite users 버튼을 클릭한 후 임의의 사용자 계정명(BI_user01)을 입력한 후 우측 **\[+\]** 버튼을 클릭합니다.
+12. 방금 만든 Dashboard를 다른 사용자에게 공유해 보겠습니다. 좌측 상단 유저 아이콘을 클릭하고 \[Manage QuickSight\] 를 클릭합니다.
+13. Invite users 버튼을 클릭한 후 임의의 사용자 계정명(BI_user01)을 입력한 후 우측 **\[+\]** 버튼을 클릭합니다.
 Email은 다른 사용자의 Email 주소를 입력하고 Role은 AUTHOR, IAM User는 NO를 선택한 후 Invite 버튼을 클릭합니다.
 ![aws-quicksight-user-invitation](./assets/aws-quicksight-user-invitation.png)
-16. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
+14. 사용자는 다음과 같은 Invitation Email을 받고 Click to accept invitation을 클릭하면 계정 생성 메뉴에서 비밀번호를 변경할 수 있습니다.
 ![aws-quicksight-user-email](./assets/aws-quicksight-user-email.png)
-17. QuickSight 화면으로 돌아가서 우측 상단의 **Share > Share analysis** 를 클릭합니다.
+15. QuickSight 화면으로 돌아가서 우측 상단의 **Share > Share analysis** 를 클릭합니다.
 ![aws-quicksight-share-analysis.png](./assets/aws-quicksight-share-analysis.png)
-18. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
+16. BI_user01을 선택한 후 Share 버튼을 클릭합니다.
 ![aws-quicksight-share-analysis-users](./assets/aws-quicksight-share-analysis-users.png)
-19. 사용자는 다음과 같은 Email을 수신합니다. **\[Click to View\]** 를 클릭하여 분석결과를 확인할 수 있습니다.
+17. 사용자는 다음과 같은 Email을 수신합니다. **\[Click to View\]** 를 클릭하여 분석결과를 확인할 수 있습니다.
 ![aws-quicksight-user-email-click-to-view](./assets/aws-quicksight-user-email-click-to-view.png)
 
 \[[Top](#Top)\]
