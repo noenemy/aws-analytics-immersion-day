@@ -74,11 +74,14 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
 6. Step 3: Configure Instance Details 화면에서 Advanced Details을 클릭하고 아래 userdata를 복사하여 붙여 넣습니다.
     ```shell script
     #!/bin/env bash
-    wget 'https://github.com/ksmin23/aws-analytics-immersion-day-2020/archive/master.zip'
+    wget 'https://github.com/ksmin23/aws-analytics-immersion-day/archive/master.zip'
     unzip master.zip
     chown -R ec2-user:ec2-user $(ls --hide=*.zip)
     yum -y install python36
     pip-3.6 install boto3
+    ln ./aws-analytics-immersion-day/src/main/python/UpsertToES/upsert_to_es.py upsert_to_es.py
+    ln ./aws-analytics-immersion-day/src/main/python/MergeSmallFiles/athena_ctas.py athena_ctas.py
+    ln ./aws-analytics-immersion-day/src/main/python/utils/gen_kinesis_data.py gen_kinesis_data.py .py
     ```
     그리고, **\[Next: Add Storage\]** 을 클릭합니다.
 7. Step 4: Add Storage 화면에서 기본값을 그대로 두고 **\[Next: Add Tags\]** 를 클릭합니다.
