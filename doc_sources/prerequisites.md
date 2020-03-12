@@ -81,7 +81,7 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
     pip-3.6 install boto3
     ln ./aws-analytics-immersion-day/src/main/python/UpsertToES/upsert_to_es.py upsert_to_es.py
     ln ./aws-analytics-immersion-day/src/main/python/MergeSmallFiles/athena_ctas.py athena_ctas.py
-    ln ./aws-analytics-immersion-day/src/main/python/utils/gen_kinesis_data.py gen_kinesis_data.py .py
+    ln ./aws-analytics-immersion-day/src/main/python/utils/gen_kinesis_data.py gen_kinesis_data.py
     ```
     그리고, **\[Next: Add Storage\]** 을 클릭합니다.
 7. Step 4: Add Storage 화면에서 기본값을 그대로 두고 **\[Next: Add Tags\]** 를 클릭합니다.
