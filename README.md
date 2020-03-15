@@ -279,7 +279,6 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 
 ![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
-**Amazon ES 도메인을 만들려면(콘솔)**
 1. AWS Management Console에서 Analytics의 **Elasticsearch** 서비스를 선택합니다.
 2. (Step 1: Choose deployment type) **Create a new domain(새 도메인 생성)** 을 선택합니다.
 3. **Elasticsearch 도메인 생성** 페이지에서 **Deployment type(배포 유형)** 에 대해 **Production(프로덕션)** 을 선택합니다.
