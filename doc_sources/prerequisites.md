@@ -30,14 +30,16 @@ AWS Management Console access 둘 모두를 선택합니다. Console password에
 2. **NETWORK & SECURITY** 메뉴에서 **Security Groups** 항목을 선택합니다.
 3. **\[Create Security Group\]** 을 클릭합니다.
 4. Create Security Group 화면에서 Security Group에 필요한 정보를 입력한 후, 새로운 security group을  **\[Create\]** 합니다.
-    + Security Group Name : bastion
-    + Description : SG for bastion
+    + Security group name : bastion
+    + Description : security group for bastion
  
     Security group rules의 **Inbound** 에 아래 내용을 입력합니다.
     + Type : SSH
     + Protocol : TCP
     + Port Range : 22
     + Source : 0.0.0.0/0
+
+    ![aws-ec2-security-group-for-bastion](../assets/aws-ec2-security-group-for-bastion.png)
 
 \[[Top](#Top)\]
 
@@ -47,13 +49,15 @@ Elasticsearch Service을 위한 security group을 생성하고 구성합니다.
 2. **NETWORK & SECURITY** 메뉴에서 **Security Groups** 항목을 선택합니다.
 3. **\[Create Security Group\]** 을 클릭합니다.
 4. Create Security Group 화면에서 Security Group에 필요한 정보를 입력한 후, 새로운 security group을  **\[Create\]** 합니다.
-    + Security Group Name : use-es-cluster-sg
+    + Security group name : use-es-cluster-sg
     + Description : security group for an es client
 
     Security group rules의 **Inbound** 은 아무것도 입력하지 않습니다.
+    
+    ![aws-ec2-security-group-for-es-client](../assets/aws-ec2-security-group-for-es-client.png)
 5. 다시 **\[Create Security Group\]** 클릭해서 Create Security Group 화면으로 이동합니다.
 Security Group에 필요한 정보를 입력한 후, 새로운 security group을 **\[Create\]** 합니다.
-    + Security Group Name : es-cluster-sg
+    + Security group name : es-cluster-sg
     + Description : security group for an es cluster
  
     Security group rules의 **Inbound** 에 아래 내용을 입력합니다.
@@ -62,13 +66,15 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
     + Port Range : 0-65535
     + Source : `use-es-cluster-sg` 의 security group id ex) sg-038b632ef1825cb7f
 
+     ![aws-ec2-security-group-for-es-cluster](../assets/aws-ec2-security-group-for-es-cluster.png)
+
 \[[Top](#Top)\]
 
 ## <a name="ec2-launch"></a>EC2 생성
 실습에 필요한 데이터를 실시간으로 발생시킬 EC2 인스턴스를 생성합니다.
 1. AWS Management Console에서 EC2 서비스에 접속합니다.
 2. 우측 상단에서 Region은 US West (Oregon)를 선택합니다. 
-3. 좌측 메뉴에서 Instances를 선택한 후, **\[Launch Instance\]** 를 클릭 해서 새로운 인스턴스 생성을 시작합니다.
+3. 좌측 **INSTANCES** 메뉴에서 **Instances** 를 선택한 후, **\[Launch Instance\]** 를 클릭 해서 새로운 인스턴스 생성을 시작합니다.
 ![aws-ec2-launch-instance](../assets/aws-ec2-launch-instance.png)
 4. Step 1: Choose an Amazon Machine Image (AMI) 화면에서 **Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type** 을 선택합니다.
 ![aws-ec2-choose-ami](../assets/aws-ec2-choose-ami.png)
@@ -79,6 +85,7 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
 8. Step 5: Add Tags 화면에서 **\[Next: Configure Security Group\]** 을 클릭합니다.
 9. Step 6: Configure Security Group 화면에서 Assign a security group 에서 Select an **existing** security group를 선택하고,
 Security Group 중에서 Name이 `bastion`과 `use-es-cluster-sg` 를 선택 한 후 **\[Review and Launch\]** 를 클릭합니다.
+![aws-ec2-configure-security-group](../assets/aws-ec2-configure-security-group.png)
 10. Step 7: Review Instance Launch 화면에서 **\[Launch\]** 를 클릭합니다.
 11. EC2 Instance에 접속하기 위한 Key pair를 생성합니다. 
 Create a new key pair를 선택하고 Key pair name은 `analytics-hol` 을 입력한 후 Download Key Pair를 클릭합니다.
