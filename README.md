@@ -428,7 +428,7 @@ Time Filter field name에 `InvoiceDate` 를 선택합니다.
 11. (Visualize) 아래와 같이 Data 탭의 Metrics에서 Y-Axis를 Aggregation은 `Sum`, Field는 `Quantity`를 선택 후 적용 합니다.
 ![kibana-05-discover-change-metrics](./assets/kibana-05-discover-change-metrics.png)
 12. (Visualize) 좌측 상단의 **\[Save\]** 를 클릭하고, 저장한 그래프의 이름을 적은 후에 **\[Confirm Save\]** 를 클릭합니다.
-![kibna-08-visualize-save](./assets/kibna-08-visualize-save.png)
+![kibna-08-visualize-save](./assets/kibana-08-visualize-save.png)
 13. (Dashboards) 좌측의 Dashboard 아이콘을 클릭 후, **\[Create new dashboard\]** 버튼을 클릭 합니다.
 ![kibana-09-dashboards](./assets/kibana-09-dashboards.png)
 14. (Dashboards) 좌측 상단의 **\[Add\]** 를 클릭해서, **Add Panels** 에 이전 단계에서 생성한 그래프를 선택 합니다.
