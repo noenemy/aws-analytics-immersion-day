@@ -120,7 +120,7 @@ Key Pair를 PC의 임의 위치에 저장한 후 **\[Launch Instances\]** 를 �
     ./aws-analytics-immersion-day-master/set-up-hands-on-lab.sh
     ```
     (5) 실습 환경 설정 스크립트 실행 후, 실습에 필요한 파일들이 정상적으로 생성되었는지 확인한다. 예를 들어 아래와 같이 소스 코드와 필요한 파일들이 존재하는지 확인하다.
-    ![aws-ec2-setup-hands-on-lab](../assets/aws-ec2-setup-hands-on-lab.png){: width="286" height="139"}
+    ![aws-ec2-setup-hands-on-lab](../assets/aws-ec2-setup-hands-on-lab.png)
 
 3. AWS의 다른 리소스 접근을 위해 AWS Configure를 진행합니다. 이때 앞서 생성한 IAM User 데이터를 활용합니다.
 이전에 다운로드 받은 .csv 파일을 열어 `Access key ID`와 `Secret access key`를 확인하고 입력합니다.
