@@ -67,23 +67,14 @@ Security Group에 필요한 정보를 입력한 후, 새로운 security group을
 ## <a name="ec2-launch"></a>EC2 생성
 실습에 필요한 데이터를 실시간으로 발생시킬 EC2 인스턴스를 생성합니다.
 1. AWS Management Console에서 EC2 서비스에 접속합니다.
-2. 우측 상단에서 Region은 US West (Oregon)를 선택합니다.
-3. Launch Instance를 선택하여 새로운 인스턴스 생성을 시작합니다.
+2. 우측 상단에서 Region은 US West (Oregon)를 선택합니다. 
+3. 좌측 메뉴에서 Instances를 선택한 후, **\[Launch Instance\]** 를 클릭 해서 새로운 인스턴스 생성을 시작합니다.
+![aws-ec2-launch-instance](../assets/aws-ec2-launch-instance.png)
 4. Step 1: Choose an Amazon Machine Image (AMI) 화면에서 **Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type** 을 선택합니다.
+![aws-ec2-choose-ami](../assets/aws-ec2-choose-ami.png)
 5. Step 2 : Choose an Instance Type 화면에서 인스턴스 타입은 t2.micro를 선택합니다. **\[Next: Configure Instance Details\]** 을 클릭합니다.
-6. Step 3: Configure Instance Details 화면에서 Advanced Details을 클릭하고 아래 userdata를 복사하여 붙여 넣습니다.
-    ```shell script
-    #!/bin/env bash
-    wget 'https://github.com/ksmin23/aws-analytics-immersion-day/archive/master.zip'
-    unzip master.zip
-    chown -R ec2-user:ec2-user $(ls --hide=*.zip)
-    yum -y install python36
-    pip-3.6 install boto3
-    ln ./aws-analytics-immersion-day/src/main/python/UpsertToES/upsert_to_es.py upsert_to_es.py
-    ln ./aws-analytics-immersion-day/src/main/python/MergeSmallFiles/athena_ctas.py athena_ctas.py
-    ln ./aws-analytics-immersion-day/src/main/python/utils/gen_kinesis_data.py gen_kinesis_data.py
-    ```
-    그리고, **\[Next: Add Storage\]** 을 클릭합니다.
+![aws-ec2-choose-instance-type](../assets/aws-ec2-choose-instance-type.png)
+6. Step 3: Configure Instance Details 화면에서 **\[Next: Add Storage\]** 을 클릭합니다.
 7. Step 4: Add Storage 화면에서 기본값을 그대로 두고 **\[Next: Add Tags\]** 를 클릭합니다.
 8. Step 5: Add Tags 화면에서 **\[Next: Configure Security Group\]** 을 클릭합니다.
 9. Step 6: Configure Security Group 화면에서 Assign a security group 에서 Select an **existing** security group를 선택하고,
@@ -92,12 +83,15 @@ Security Group 중에서 Name이 `bastion`과 `use-es-cluster-sg` 를 선택 한
 11. EC2 Instance에 접속하기 위한 Key pair를 생성합니다. 
 Create a new key pair를 선택하고 Key pair name은 `analytics-hol` 을 입력한 후 Download Key Pair를 클릭합니다.
 Key Pair를 PC의 임의 위치에 저장한 후 **\[Launch Instances\]** 를 클릭합니다. (인스턴스 기동에 몇 분이 소요될 수 있습니다.)
+![aws-ec2-select-keypair](../assets/aws-ec2-select-keypair.png)
 12. (MacOS 사용자) 다운로드 받은 Key Pair 파일의 File Permission을 400으로 변경합니다.
     ```shell script
     $ chmod 400 ./analytics-hol.pem 
     $ ls -lat analytics-hol.pem 
     -r--------  1 ******  ******  1692 Jun 25 11:49 analytics-hol.pem
     ```
+    Windows OS 사용자의 경우, [PuTTY를 사용하여 Windows에서 Linux 인스턴스에 연결](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html)
+    를 참고하십시요.
 
 \[[Top](#Top)\]
 
@@ -107,7 +101,27 @@ Key Pair를 PC의 임의 위치에 저장한 후 **\[Launch Instances\]** 를 �
     ```shell script
     ssh -i "<Key pair name>" ec2-user@<Public IP>
     ```
-2. User Data를 통해 필요한 파일들이 잘 다운로드 받아졌는지 확인합니다.
+2. ssh로 접속한 EC2 인스턴스에서 다음 작업을 순서대로 수행 합니다.
+
+    (1) 소소 코드를 다운로드 받는다. 
+    ```shell script
+    wget 'https://github.com/ksmin23/aws-analytics-immersion-day/archive/master.zip'
+    ```
+    (2) 다운로드 받은 소스 코드의 압축을 해제한다.
+    ```shell script
+    unzip -u master.zip
+    ```
+    (3) 실습 환경 설정 스크립트에 실행 권한을 부여한다.
+    ```shell script
+    chmod +x ./aws-analytics-immersion-day-master/set-up-hands-on-lab.sh
+    ```
+    (4) 실습 환경 설정 스크립트를 실행한다.
+    ```shell script
+    ./aws-analytics-immersion-day-master/set-up-hands-on-lab.sh
+    ```
+    (5) 실습 환경 설정 스크립트 실행 후, 실습에 필요한 파일들이 정상적으로 생성되었는지 확인한다. 예를 들어 아래와 같이 소스 코드와 필요한 파일들이 존재하는지 확인하다.
+    ![aws-ec2-setup-hands-on-lab](../assets/aws-ec2-setup-hands-on-lab.png){: width="286" height="139"}
+
 3. AWS의 다른 리소스 접근을 위해 AWS Configure를 진행합니다. 이때 앞서 생성한 IAM User 데이터를 활용합니다.
 이전에 다운로드 받은 .csv 파일을 열어 `Access key ID`와 `Secret access key`를 확인하고 입력합니다.
     ```shell script
