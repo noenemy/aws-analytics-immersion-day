@@ -286,7 +286,7 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 5. **\[Next\]** 를 선택합니다.
 6. (Step 2: Configure domain) 도메인의 이름을 입력합니다. 이 실에서는 이후에 다룰 `retail`를 예제 도메인 이름으로 사용합니다.
 7. **인스턴스 유형** 에서 Amazon ES 도메인의 인스턴스 유형을 선택합니다. 이 실습에서는 테스트 목적에 적합한 소용량의 경제적인 인스턴스 유형
-`t2.small.elasticsearch`를 사용하는 것이 좋습니다.
+`t2.medium.elasticsearch`를 사용하는 것이 좋습니다.
 8. **인스턴스 수** 에 원하는 인스턴스 수를 입력합니다. 이 실습에서는 기본값 `1`을 사용합니다.
 9. 스토리지 유형에서 EBS를 선택합니다.
 - a. EBS volume type(EBS 볼륨 유형)에 일반용(SSD)을 선택합니다. 자세한 내용은 Amazon EBS 볼륨 유형을 참조하십시오.
