@@ -119,7 +119,7 @@ def main():
   parser = argparse.ArgumentParser()
 
   parser.add_argument('-I', '--input-file', help='The input file path ex) ./resources/online_retail.csv')
-  parser.add_argument('--out-format', default='csv', choices=['csv', 'tsv', 'json'])
+  parser.add_argument('--out-format', default='json', choices=['csv', 'tsv', 'json'])
   parser.add_argument('--service-name', default='console', choices=['kinesis', 'firehose', 'console'])
   parser.add_argument('--stream-name', help='The name of the stream to put the data record into.')
   parser.add_argument('--max-count', default=10, type=int, help='The max number of records to put.')
