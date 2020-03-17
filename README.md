@@ -122,8 +122,14 @@ Amazon Athena를 이용해서 S3에 저장된 데이터를 기반으로 테이�
 
 ### 1단계: 데이터베이스 생성
 1. Athena 콘솔을 엽니다.
-2. Athena 콘솔을 처음 방문하면 시작하기 페이지로 이동합니다. **\[Get Started\]** 를 선택해 쿼리 편집기를 엽니다. 
-처음 방문하는 경우가 아니라면 Athena 쿼리 편집기가 열립니다.
+2. Athena 콘솔을 처음 방문하면 시작하기 페이지로 이동합니다. **\[Get Started\]** 를 선택해 쿼리 편집기를 엽니다.
+3. 처음 방문 하는 경우라면, **set up a query result location in Amazon S3** 를 클릭해서 Athena의 쿼리 결과를 저장할 s3 위치를 설정합니다.
+![aws-athena-setup-query-results-location-01](./assets/aws-athena-setup-query-results-location-01.png)
+이번 실습에서는 Kinesis Data Firehose 설정 단계에서 생성한 s3 bucket에 Athena의 쿼리 결과를 저장할 디렉터리를 생성합니다.
+예를 들어, `s3://aws-analytics-immersion-day-xxxxxxxx/athena-query-results/` (`xxxxxxxx` 는 bucket 이름이 겹치지 않도록 입력한 임의의 숫자나
+문자열 입니다.)
+![aws-athena-setup-query-results-location-02](./assets/aws-athena-setup-query-results-location-02.png)
+처음 방문하는 경우가 아니라면, Athena 쿼리 편집기가 열립니다.
 3. Athena 쿼리 편집기에서 예제 쿼리가 있는 쿼리 창을 볼 수 있습니다. 쿼리 창의 아무 곳에나 쿼리를 입력하기 시작합니다.
 4. `mydatabase` 라는 데이터베이스를 생성하려면 다음 CREATE DATABASE 문을 입력한 다음, **\[Run Query\]** 를 선택합니다.
     ```buildoutcfg
