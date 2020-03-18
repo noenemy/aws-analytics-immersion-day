@@ -300,35 +300,57 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 `t2.medium.elasticsearch`를 사용하는 것이 좋습니다.
 8. **인스턴스 수** 에 원하는 인스턴스 수를 입력합니다. 이 실습에서는 기본값 `1`을 사용합니다.
 9. 스토리지 유형에서 EBS를 선택합니다.
-- a. EBS volume type(EBS 볼륨 유형)에 일반용(SSD)을 선택합니다. 자세한 내용은 Amazon EBS 볼륨 유형을 참조하십시오.
-- b. EBS volume size(EBS 볼륨 크기)에 각 데이터 노드용 외부 스토리지의 크기를 GiB 단위로 입력합니다. 이 실습에서는 기본값 `10`을 사용합니다.
+    + a. EBS volume type(EBS 볼륨 유형)에 일반용(SSD)을 선택합니다. 자세한 내용은 Amazon EBS 볼륨 유형을 참조하십시오.
+    + b. EBS volume size(EBS 볼륨 크기)에 각 데이터 노드용 외부 스토리지의 크기를 GiB 단위로 입력합니다. 이 실습에서는 기본값 `10`을 사용합니다.
 10. 지금은 **Dedicated master nodes(전용 마스터 노드), Snapshot configuration(스냅샷 구성)** 및 **Optional Elasticsearch cluster settings(선택적 Elasticsearch 클러스터 설정)** 섹션을 무시할 수 있습니다.
 11. **\[Next\]** 를 선택합니다.
 12. (Step 3: Configure access and security) **Network configuration(네트워크 구성)** 의 경우 **VPC access** 를 선택합니다.
 적절한 VPC와 subnet을 선택합니다. Security Groups으로 준비 단계에서 생성한 `es-cluster-sg`를 선택합니다.
 13. 지금은 **Amazon Cognito Authentication(Amazon Cognito 인증)** 과 **Fine–grained access control** 을 disable 합니다.
 14. **Access policy(액세스 정책)** 의 경우 **Domain access policy(도메인 액세스 정책)** 에서 **JSON defined access policy(JSON 정의 액세스 정책)** 선택한 다음,
-**Add or edit the access policy(액세스 정책 추가 또는 편집)** 에 아래와 같이 입력합니다.
-    ```json
-    {
-      "Version": "2012-10-17",
-      "Statement": [
+**Add or edit the access policy(액세스 정책 추가 또는 편집)** 에 다음 템플릿을 이용해서 **JSON defined access policy** 를 생성해서 입력 합니다.
+    + JSON defined access policy Template - `<DOMAIN-NAME>` 에 **(Step 2: Configure domain)** 에서 입력한 도메인 이름을 일력합니다.
+        ```json
         {
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": "*"
-          },
-          "Action": [
-            "es:Describe*",
-            "es:List*",
-            "es:Get*",
-            "es:ESHttp*"
-          ],
-          "Resource": "arn:aws:es:::domain/retail/*"
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "es:Describe*",
+                "es:List*",
+                "es:Get*",
+                "es:ESHttp*"
+              ],
+              "Resource": "arn:aws:es:::domain/<DOMAIN-NAME>/*"
+            }
+          ]
         }
-      ]
-    }
-    ```
+        ```
+    + 예) 이번 실습에서는 `retail` 을 도메인 이름으로 사용했기 때문에, 아래와 같이 JSON defined access policy 를 생성합니다.
+        ```json
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "es:Describe*",
+                "es:List*",
+                "es:Get*",
+                "es:ESHttp*"
+              ],
+              "Resource": "arn:aws:es:::domain/retail/*"
+            }
+          ]
+        }
+        ```
 15. **Encryption(암호화)** 에서 **Require HTTPS for all traffic to the domain** 만 허용하고, 다른 항목은 disable 합니다.
 16. **Encryption(암호화)** 의 모든 기본값을 유지합니다. **\[Next\]** 를 선택합니다.
 17. **Review** 페이지에서 도메인 구성을 검토한 다음 **확인**을 선택합니다.
@@ -346,7 +368,8 @@ Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인
 2. **Layers** 메뉴에 들어가서 **\[Create layer\]** 을 선택합니다.
 3. Name에 `es-lib` 를 입력합니다.
 4. `Upload a file from Amazon S3` 를 선택하고, 라이브러리 코드가 저장된 s3 link url 또는 압축한 라이브러리 코드 파일을 입력합니다.
-(참고로 이 실습에서는 `resources/es-lib.zip` 파일을 사용합니다.)
+이번 실습에서는 `resources/es-lib.zip` 파일을 사용합니다. `es-lib.zip` 생성 방법은 
+[AWS Lambda Layer에 등록할 Python 패키지 생성 예제](#aws-lambda-layer-python-packages) 를 참고하세요.
 5. `Compatible runtimes` 에서 `Python 3.8` 을 선택합니다.
 ![aws-lambda-create-layer](./assets/aws-lambda-create-layer.png)
 
@@ -467,7 +490,18 @@ Lambda Architecture 구조의 Business Intelligent System을 구축해 보셨습
 + [Amazon Kinesis Data Firehose](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html)
 + [Amazon Kinesis Data Streams](https://docs.aws.amazon.com/streams/latest/dev/introduction.html)
 + [Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/welcome.html)
-
++ [AWS Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html#configuration-layers-path)
+    + <a name="aws-lambda-layer-python-packages"></a>AWS Lambda Layer에 등록할 Python 패키지 생성 예제: **elasticsearch** 
+    ```
+    $ python3 -m venv es-lib # virtual environments을 생성함
+    $ cd es-lib
+    $ source bin/activate
+    $ mkdir -p python_modules # 필요한 패키지를 저장할 디렉터리 생성
+    $ pip install elasticsearch -t python_modules # 필요한 패키지를 사용자가 지정한 패키지 디렉터리에 저장함
+    $ mv python_modules python # 사용자가 지정한 패키지 디렉터리 이름을 python으로 변경함 (python 디렉터리에 패키지를 설치할 경우 에러가 나기 때문에 다른 이름의 디렉터리에 패키지를 설치 후, 디렉터리 이름을 변경함)
+    $ zip -r es-lib.zip python/ # 필요한 패키지가 설치된 디렉터리를 압축함
+    $ aws s3 cp es-lib.zip s3://my-lambda-layer-packages/python/ # 압축한 패키지를 s3에 업로드 한 후, lambda layer에 패키지를 등록할 때, s3 위치를 등록하면 됨
+    ```
 \[[Top](#Top)\]
 
 ### Further readings
