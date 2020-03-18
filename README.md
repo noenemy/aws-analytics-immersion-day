@@ -31,6 +31,9 @@
 \[[Top](#Top)\]
 
 ## <a name="kinesis-data-streams"></a>입력 데이터를 수신할 Kinesis Data Streams 생성하기
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
+
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
 1. **Get Started** 버튼을 클릭합니다.
 2. **\[Create data stream\]** 버튼을 클릭합니다.
@@ -43,6 +46,8 @@ AWS Management Console에서 Kinesis 서비스를 선택합니다.
 ## <a name="kinesis-data-firehose"></a>데이터를 S3에 저장하기 위한 Kinesis Data Firehose 생성하기
 Kinesis Data Firehose를 이용해서 실시간으로 데이터를 S3, Redshift, ElasticSearch 등의 목적지에 수집할 수 있습니다.
 AWS Management Console에서 Kinesis 서비스를 선택합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 1. Get Started 버튼을 클릭합니다.
 2. Deliver streaming data with Kinesis Firehose delivery streams 메뉴의 **\[Create delivery stream\]** 을 클릭하여
@@ -333,6 +338,8 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
 ## <a name="amazon-lambda-function"></a>AWS Lambda Function을 이용해서 실시간 데이터를 ElasticSearch에 수집하기
 Lambda function을 이용해서 Amazon ES에 데이터를 실시간으로 색인할 수 있습니다.
 이번 실습에서는 AWS Lambda 콘솔을 사용하여 Lambda 함수를 생성합니다.
+
+![aws-analytics-system-build-steps](./assets/aws-analytics-system-build-steps.png)
 
 ### Lambda 함수에서 사용할 공통 라이브러를 Layers에 추가하려면,
 1. **AWS Lambda 콘솔** 을 엽니다.
