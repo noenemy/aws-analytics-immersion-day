@@ -325,7 +325,7 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
                 "es:Get*",
                 "es:ESHttp*"
               ],
-              "Resource": "arn:aws:es:::domain/<DOMAIN-NAME>/*"
+              "Resource": "arn:aws:es:<region-id>:<account-id>:domain/<DOMAIN-NAME>/*"
             }
           ]
         }
@@ -346,7 +346,7 @@ Amazon ES 도메인은 Elasticsearch 클러스터와 동의어입니다. 도메�
                 "es:Get*",
                 "es:ESHttp*"
               ],
-              "Resource": "arn:aws:es:::domain/retail/*"
+              "Resource": "arn:aws:es:us-west-2:109624076471:domain/retail/*"
             }
           ]
         }
@@ -404,7 +404,7 @@ layer의 arn을 직접 입력하면 됩니다.
     ```buildoutcfg
     ES_HOST=vpc-retail-xkl5jpog76d5abzhg4kyfilymq.us-west-1.es.amazonaws.com
     REQUIRED_FIELDS=Invoice,StockCode,Customer_ID
-    REGION_NAME=us-west-1
+    REGION_NAME=us-west-2
     DATE_TYPE_FIELDS=InvoiceDate
     ```
 13. **\[Save\]** 선택합니다.
