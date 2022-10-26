@@ -4,8 +4,6 @@
 이 실습을 통해서 `데이터 수집 -> 저장 -> 분석/처리 -> 시각화` 단계를 aws의 analytics 서비스를 이용해서
 어떻게 구축할 수 있는지 경험할 수 있습니다.
 
-test
-
 ## Table of Contents
 * [Solutions Architecture Overview](#solutions-architecture-overview)
 * [사전 준비 작업](#preliminaries)
